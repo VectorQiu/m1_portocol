@@ -1,0 +1,60 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+        // https://github.com/microsoft/vscode-cmake-tools/blob/main/docs/debug-launch.md
+        {
+            "name": "MSVC Debug",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    // add the directory where our target was built to the PATHs
+                    // it gets resolved by CMake Tools:
+                    "name": "PATH",
+                    "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+                }
+            ],
+            "externalConsole": false,
+            "preLaunchTask": "Build project",
+        },
+        {
+            "name": "GCC Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [
+            ],
+            "stopAtEntry": false, // 表示调试器在启动时不会停在程序入口点
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    // add the directory where our target was built to the PATHs
+                    // it gets resolved by CMake Tools:
+                    "name": "PATH",
+                    "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+                }
+            ],
+            "externalConsole": false, // 表示不使用外部控制台
+            "MIMode": "gdb", // 指定调试器模式为 GDB
+            // "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
+            "setupCommands": [
+                { // 启用 GDB 的美化打印功能
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                { // 将反汇编风格设置为 Intel 语法
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build project", // 启动调试之前运行的任务
+        }
+    ],
+}

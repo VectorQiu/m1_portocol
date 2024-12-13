@@ -1,0 +1,95 @@
+{
+    "env": {
+        "myIncludePath": [
+            "${workspaceFolder}/src/crc/include",
+            "${workspaceFolder}/src/m1_protocol/include"
+        ],
+        "myDefines": [
+            "_DEBUG",
+            "UNICODE",
+            "_UNICODE",
+            "_WINDOWS"
+        ],
+        "mySourcePath": [
+            "${workspaceFolder}/src/crc",
+            "${workspaceFolder}/src/m1_protocol"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${env:myIncludePath}"
+            ],
+            "defines": [
+                "${env:myDefines}"
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe",
+            "compilerArgs": [],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            // "windowsSdkVersion": "",
+            "intelliSenseMode": "windows-msvc-x64",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "${env:myIncludePath}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${env:myIncludePath}"
+                // "/usr/include"
+            ],
+            "defines": [
+                "${env:myDefines}"
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compilerPath": "",
+            "compilerArgs": [
+                "-m32"
+            ],
+            "intelliSenseMode": "linux-gcc-x86",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "forcedInclude": [],
+            "compileCommands": "",
+            "dotConfig": "",
+            "mergeConfigurations": true,
+            "customConfigurationVariables": {},
+            "browse": {
+                "path": [
+                    "${env:myIncludePath}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${env:myIncludePath}"
+            ],
+            "defines": [
+                "${env:myDefines}"
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compilerPath": "",
+            "intelliSenseMode": "macos-clang-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "macFrameworkPath": [],
+            "browse": {
+                "path": [
+                    "${env:myIncludePath}"
+                ]
+            }
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}
