@@ -157,7 +157,8 @@ int main(int argc, char* argv[]) {
     }
 
     u8 source_id[2] = {0xF1, 0xF2};
-    m1_protocol_init("m1", route_table, 2, rx_callback_table, 1, source_id, 2);
+    m1_protocol_init("m1", 4096, route_table, 2, rx_callback_table, 1,
+                     source_id, 2);
     m1_tx_data_t tx_data = {0};
     u8 data[10] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
     tx_data.data = data;

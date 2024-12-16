@@ -24,3 +24,7 @@ if(NOT TARGET GTest::GMock)
 endif()
 
 enable_testing() # 启用测试
+
+add_subdirectory(memory_pool)
+
+add_test(NAME MemoryTests COMMAND test_memory_pool)

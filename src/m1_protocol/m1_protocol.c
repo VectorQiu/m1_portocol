@@ -89,6 +89,7 @@ etype_e m1_get_route_table(m1_route_item_t** table, size_t* len) {
  * \brief           Initialize the M1 protocol.
  *
  * \param[in]       name: Name of the M1 protocol instance.
+ * \param[in]       tx_pool_size: Tx memory pool size.
  * \param[in]       route_table: Pointer to the routing table used by the
  *                  protocol.
  * \param[in]       route_len: Number of entries in the routing table.
@@ -99,13 +100,13 @@ etype_e m1_get_route_table(m1_route_item_t** table, size_t* len) {
  * \param[in]       source_id_len: Length of the source device ID.
  * \return          etype_e indicating success or failure of initialization.
  */
-etype_e m1_protocol_init(const char name[], m1_route_item_t* route_table,
-                         size_t route_len,
+etype_e m1_protocol_init(const char name[], size_t tx_pool_size,
+                         m1_route_item_t* route_table, size_t route_len,
                          m1_rx_parse_callback_item_t* rx_cb_table,
                          size_t rx_cb_len, u8* source_id,
                          size_t source_id_len) {
-    if (!(route_table && route_len && rx_cb_table && rx_cb_len && source_id
-          && source_id_len)) {
+    if (!(tx_pool_size && route_table && route_len && rx_cb_table && rx_cb_len
+          && source_id && source_id_len)) {
         return E_STATE_INVAL;
     }
 
@@ -114,6 +115,13 @@ etype_e m1_protocol_init(const char name[], m1_route_item_t* route_table,
     }
 
     m1.name = name;
+
+    /* Initialize memory pool */
+    m1.tx_pool_size = tx_pool_size;
+    m1.tx_pool = MemoryPoolInit(m1.tx_pool_size, m1.tx_pool_size);
+    if (!m1.tx_pool) {
+        return E_STATE_NO_SPACE;
+    }
 
     /* Initialize route table */
     m1.route_item = route_table;

@@ -90,12 +90,13 @@ etype_e m1_datalink_send(m1_packet_t* packet) {
     etype_e ret = E_STATE_OK;
     size_t frame_len = sizeof(m1_frame_head_t) + packet->data->data_len
                        + sizeof(u16);
-    u8* frame_buf = (u8*)m1_malloc(frame_len);
-    memset(frame_buf, 0, frame_len);
+    u8* frame_buf = (u8*)MemoryPoolAlloc(m1.tx_pool, frame_len);
     if (frame_buf == NULL) {
         /** Memory allocation failed. */
         return E_STATE_NO_SPACE;
     }
+    memset(frame_buf, 0, frame_len);
+
     m1_frame_head_t* frame_head = (m1_frame_head_t*)frame_buf;
 
     /* Populate frame header fields */
@@ -122,7 +123,8 @@ etype_e m1_datalink_send(m1_packet_t* packet) {
 
     /* Transmit the frame */
     ret = packet->tx->tx(frame_buf, frame_len);
-    m1_free(frame_buf);
+
+    MemoryPoolFree(m1.tx_pool, frame_buf);
     if (ret != E_STATE_OK) {
         if (m1.tx_abnormal_cb != NULL) {
             m1.tx_abnormal_cb(packet);

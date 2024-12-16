@@ -40,6 +40,7 @@
 #include "./m1_protocol/m1_route.h" /*!< Includes routing logic for the M1 protocol. */
 #include "./m1_protocol/m1_rx_parse.h" /*!< Includes parsing logic for received data. */
 #include "./m1_protocol/m1_typedef.h" /*!< Includes common type definitions for the M1 protocol. */
+#include "./memory_pool/memory_pool.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +79,10 @@ typedef struct m1_internal_data {
     const char* name;     /*!< Name or identifier for the protocol instance. */
     u8* source_id;        /*!< Pointer to the source ID. */
     size_t source_id_len; /*!< Length of the source ID. */
+
+    MemoryPool* tx_pool; /* tx memory pool */
+    size_t tx_pool_size; /* tx memory pool size */
+    // 互斥锁
 
     m1_route_item_t* route_item; /*!< Pointer to the routing table. */
     size_t route_item_len;       /*!< Number of entries in the routing table. */

@@ -1,4 +1,4 @@
-#include "./memory_pool/memorypool.h"
+#include "./memory_pool/memory_pool.h"
 
 #define MP_CHUNKHEADER sizeof(struct _mp_chunk)
 #define MP_CHUNKEND sizeof(struct _mp_chunk*)
@@ -66,6 +66,7 @@ void get_memory_info(MemoryPool* mp,
                      _MP_Memory* mm,
                      mem_size_t* free_list_len,
                      mem_size_t* alloc_list_len) {
+    (void)mp;
 #ifdef _Z_MEMORYPOOL_THREAD_
     MP_LOCK(mp);
 #endif

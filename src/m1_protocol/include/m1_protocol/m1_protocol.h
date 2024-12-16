@@ -55,6 +55,7 @@ extern "C" {
  * \brief           Initialize the M1 protocol.
  *
  * \param[in]       name: Name of the M1 protocol instance.
+ * \param[in]       tx_pool_size: Tx memory pool size.
  * \param[in]       route_table: Pointer to the routing table used by the
  *                  protocol.
  * \param[in]       route_len: Number of entries in the routing table.
@@ -65,8 +66,8 @@ extern "C" {
  * \param[in]       source_id_len: Length of the source device ID.
  * \return          etype_e indicating success or failure of initialization.
  */
-etype_e m1_protocol_init(const char name[], m1_route_item_t* route_table,
-                         size_t route_len,
+etype_e m1_protocol_init(const char name[], size_t tx_pool_size,
+                         m1_route_item_t* route_table, size_t route_len,
                          m1_rx_parse_callback_item_t* rx_cb_table,
                          size_t rx_cb_len, u8* source_id, size_t source_id_len);
 

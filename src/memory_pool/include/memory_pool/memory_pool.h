@@ -9,7 +9,11 @@
 #include <string.h>
 #include <stdint.h>
 
-#define mem_size_t unsigned long long
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+#define mem_size_t unsigned int
 #define KB (mem_size_t)(1 << 10)
 #define MB (mem_size_t)(1 << 20)
 #define GB (mem_size_t)(1 << 30)
@@ -78,5 +82,9 @@ float MemoryPoolGetUsage(MemoryPool* mp);
 // 数据占用空间
 mem_size_t GetProgMemory(MemoryPool* mp);
 float MemoryPoolGetProgUsage(MemoryPool* mp);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif  // !_Z_MEMORYPOOL_H_

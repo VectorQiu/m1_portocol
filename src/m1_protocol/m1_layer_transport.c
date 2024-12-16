@@ -181,9 +181,11 @@ etype_e m1_transport_send(m1_tx_data_t* tx_data) {
     for (size_t i = 0; i < tx_data->target_id_len; ++i) {
         packet.target_id = tx_data->target_id[i]; /*!< Assign target ID */
         if (packet.reliable_tx == M1_RELIABLE_TX) {
-            m1_packet_t* wait_ack_packet = (m1_packet_t*)m1_malloc(
-                sizeof(m1_packet_t)); /*!< Allocate memory for acknowledgment
-                                         waiting packet */
+            // TODO: 加锁
+            /*! Allocate memory for acknowledgment waiting packet */
+            m1_packet_t* wait_ack_packet = (m1_packet_t*)MemoryPoolAlloc(
+                m1.tx_pool, sizeof(m1_packet_t));
+            // TODO: 释放锁
             if (!wait_ack_packet) {
                 break; /*!< Exit loop if memory allocation fails */
             }
@@ -254,6 +256,8 @@ static void handle_ack_retries(u32 freq) {
  *                  success or failure of the operation.
  *                   - `ETYPE_OK` on success.
  *                   - Other error codes indicating specific failures.
+ * \note            Multi-threaded calls are not allowed, and there is no
+ *                  resource mutual exclusion protection.
  */
 static etype_e handle_wait_ack_packet(single_list_t* node) {
     m1_packet_t* packet_node = single_list_entry(node, m1_packet_t, node);
@@ -262,15 +266,15 @@ static etype_e handle_wait_ack_packet(single_list_t* node) {
         return E_STATE_NOT_EXIST; /*!< Return error if node is invalid */
     }
 
+    /*! Free data if reference count reaches zero */
     if (--packet_node->data->reference_counter == 0) {
-        m1_free(packet_node
-                    ->data); /*!< Free data if reference count reaches zero */
+        MemoryPoolFree(m1.tx_pool, packet_node->data);
     }
 
-    single_list_remove(&m1.wait_ack_packet_head,
-                       node); /*!< Remove node from list */
-    m1_free(packet_node);     /*!< Free packet memory */
-
+    /*! Remove node from list */
+    single_list_remove(&m1.wait_ack_packet_head, node);
+    MemoryPoolFree(m1.tx_pool, packet_node); /*!< Free packet memory */
+    
     return E_STATE_OK; /*!< Return success */
 }
 
@@ -344,9 +348,9 @@ static etype_e send_ack_to_source_host(m1_frame_head_t* frame_head) {
  * \return          Pointer to the allocated acknowledgment packet data.
  */
 static m1_packet_data_t* allocate_ack_data(m1_packet_data_t* src_data) {
-    m1_packet_data_t* ack_data = (m1_packet_data_t*)m1_malloc(
-        sizeof(m1_packet_data_t)
-        + src_data->data_len); /*!< Allocate memory for acknowledgment data */
+    /*! Allocate memory for acknowledgment data */
+    m1_packet_data_t* ack_data = (m1_packet_data_t*)MemoryPoolAlloc(
+        m1.tx_pool, sizeof(m1_packet_data_t) + src_data->data_len);
     if (!ack_data) {
         link_error("Memory allocation failed for ACK data!");
         return NULL; /*!< Return NULL if memory allocation fails */

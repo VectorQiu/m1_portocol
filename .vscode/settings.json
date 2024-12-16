@@ -19,6 +19,7 @@
         "rtcompiler.h": "c",
         "single_list_ex.h": "c",
         "single_list.h": "c",
+        "memory_pool.h": "c"
     },
     //
     "editor.fontSize": 16,
@@ -81,4 +82,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.doxygen.generateOnType": false,
     "doxdocgen.c.firstLine": "/**",
+    "[cmake]": {
+        "editor.defaultFormatter": "KylinIdeTeam.cmake-intellisence"
+    }
 }
