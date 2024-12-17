@@ -149,6 +149,9 @@ static void m1_frame_parse(m1_rx_parse_node_t* node, u8* buf, size_t len) {
         return;
     }
     m1_parse_t* parse = &node->item.parse;
+    m1_frame_head_t* frame_head = NULL;
+    size_t data_len = 0;
+    size_t frame_len = 0;
 
     M1_STATS_RX_NODE_TOTAL_BYTES(node, len);
     for (size_t i = 0; i < len; i++) {
@@ -185,10 +188,9 @@ static void m1_frame_parse(m1_rx_parse_node_t* node, u8* buf, size_t len) {
             break;
 
         case M1_PARSE_FRAME_DATA:
-            m1_frame_head_t* frame_head = (m1_frame_head_t*)parse->cache;
-            size_t data_len = frame_head->data_len_msb << 8
-                              | frame_head->data_len_lsb;
-            size_t frame_len = sizeof(m1_frame_head_t) + data_len + sizeof(u16);
+            frame_head = (m1_frame_head_t*)parse->cache;
+            data_len = frame_head->data_len_msb << 8 | frame_head->data_len_lsb;
+            frame_len = sizeof(m1_frame_head_t) + data_len + sizeof(u16);
 
             /* Check if the cache can hold the entire frame */
             if (frame_len > parse->cache_len) {

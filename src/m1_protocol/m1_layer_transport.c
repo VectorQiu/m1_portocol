@@ -180,12 +180,17 @@ etype_e m1_transport_send(m1_tx_data_t* tx_data) {
 
     for (size_t i = 0; i < tx_data->target_id_len; ++i) {
         packet.target_id = tx_data->target_id[i]; /*!< Assign target ID */
+
         if (packet.reliable_tx == M1_RELIABLE_TX) {
-            // TODO: 加锁
+            for (size_t i = 0; i < m1.route_item_len; ++i) {
+                if (packet.target_id == m1.route_item[i].target_id) {
+                    packet.seq_num = m1.seq_num[i];
+                    break;
+                }
+            }
             /*! Allocate memory for acknowledgment waiting packet */
             m1_packet_t* wait_ack_packet = (m1_packet_t*)MemoryPoolAlloc(
                 m1.tx_pool, sizeof(m1_packet_t));
-            // TODO: 释放锁
             if (!wait_ack_packet) {
                 break; /*!< Exit loop if memory allocation fails */
             }
@@ -274,7 +279,7 @@ static etype_e handle_wait_ack_packet(single_list_t* node) {
     /*! Remove node from list */
     single_list_remove(&m1.wait_ack_packet_head, node);
     MemoryPoolFree(m1.tx_pool, packet_node); /*!< Free packet memory */
-    
+
     return E_STATE_OK; /*!< Return success */
 }
 
