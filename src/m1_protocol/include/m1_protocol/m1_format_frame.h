@@ -105,7 +105,9 @@ typedef enum {
  */
 typedef enum {
     M1_TRANSPORT_LAYER_PROTOCOL_TYPE = 0, /*!< Transport layer protocol type. */
-    M1_DATA_TYPE_MAX,                     /*!< Maximum data type value. */
+    H1_PROTOCOL_TYPE,
+    JSON_TYPE,
+    M1_DATA_TYPE_MAX, /*!< Maximum data type value. */
 } m1_data_type_e;
 
 #pragma pack(1) /*!< Ensure structures are packed without padding. */

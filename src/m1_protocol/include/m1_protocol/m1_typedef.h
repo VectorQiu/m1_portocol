@@ -62,15 +62,15 @@ extern "C" {
 #define link_raw(...) printf(__VA_ARGS__)
 #define link_hex(name, width, buf, size)                                       \
     do {                                                                       \
-        dbg_raw("%s:\n", name);                                                \
+        link_raw("%s:\n", name);                                                \
         for (size_t i = 0; i < size; i++) {                                    \
-            dbg_raw("%02X ", ((unsigned char*)buf)[i]);                        \
+            link_raw("%02X ", ((unsigned char*)buf)[i]);                        \
             if ((i + 1) % width == 0) {                                        \
-                dbg_raw("\n");                                                 \
+                link_raw("\n");                                                 \
             }                                                                  \
         }                                                                      \
         if (size % width != 0) {                                               \
-            dbg_raw("\n");                                                     \
+            link_raw("\n");                                                     \
         }                                                                      \
     } while (0)
 
