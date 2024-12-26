@@ -35,6 +35,9 @@
 /* includes ----------------------------------------------------------------- */
 #include "./h1_protocol/h1_cmd_common.h"
 
+/* Private function prototypes ---------------------------------------------- */
+extern etype_e h1_protocol_tx_data(u8 source_id, u8 target_id, bool reliable_tx,
+                                   u8* data, size_t data_len);
 
 /* Public functions --------------------------------------------------------- */
 etype_e h1_cmd_ping_req(void* data) {

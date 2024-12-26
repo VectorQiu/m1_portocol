@@ -37,7 +37,6 @@
 
 /* includes ----------------------------------------------------------------- */
 #include "./h1_protocol/h1_cmd_common.h"
-#include "./h1_protocol/h1_cmd_pillow.h"
 #include "./h1_protocol/h1_protocol_def.h"
 
 #ifdef __cplusplus

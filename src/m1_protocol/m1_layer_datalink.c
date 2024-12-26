@@ -110,8 +110,8 @@ etype_e m1_datalink_send(m1_packet_t* packet) {
     frame_head->attr.lsb.encrypt = packet->encrypt;
     frame_head->attr.lsb.priority = packet->priority;
     frame_head->attr.msb.compress = packet->compress;
-    frame_head->data_len_lsb = packet->data->data_len & 0x0F;
-    frame_head->data_len_msb = (packet->data->data_len & 0xF0) >> 8;
+    frame_head->data_len_lsb = packet->data->data_len & 0xFF;
+    frame_head->data_len_msb = (packet->data->data_len & 0xFF00) >> 8;
     frame_head->seq_num = packet->seq_num;
     frame_head->ack_num = packet->ack_num;
 
