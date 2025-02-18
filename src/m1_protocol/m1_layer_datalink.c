@@ -37,8 +37,8 @@
 #include "./m1_protocol/m1_layer_datalink.h"
 
 #include <string.h>
-#include "./crc/crc16.h"
-#include "./crc/crc8.h"
+#include "./crc/crc16_lookup.h"
+#include "./crc/crc8_lookup.h"
 #include "./m1_protocol/m1_layer_network.h"
 #include "./m1_protocol/m1_protocol_def.h"
 #include "./m1_protocol/m1_rx_parse.h"
@@ -116,10 +116,11 @@ etype_e m1_datalink_send(m1_packet_t* packet) {
     frame_head->ack_num = packet->ack_num;
 
     /** Calculate CRC for the frame header */
-    crc8_find_tab_pack(frame_buf, sizeof(m1_frame_head_t));
+    crc8_lookup_pack_buf(CRC8_MAXIM_LOOKUP_MODEL, frame_buf,
+                         sizeof(m1_frame_head_t));
     memcpy(frame_buf + sizeof(m1_frame_head_t), packet->data->data,
            packet->data->data_len);
-    crc16_find_tab_pack(frame_buf, frame_len);
+    crc16_lookup_pack_buf(CRC16_MODBUS_LOOKUP_MODEL, frame_buf, frame_len);
 
     /* Transmit the frame */
     ret = packet->tx->tx(frame_buf, frame_len);
@@ -176,8 +177,9 @@ static void m1_frame_parse(m1_rx_parse_node_t* node, u8* buf, size_t len) {
             } else { /* head crc8 */
                 parse->cache[parse->index] = buf[i];
                 parse->index++;
-                if (crc8_find_tab_pack_check(parse->cache,
-                                             sizeof(m1_frame_head_t))) {
+                if (crc8_lookup_verify_buf(CRC8_MAXIM_LOOKUP_MODEL,
+                                           parse->cache,
+                                           sizeof(m1_frame_head_t))) {
                     parse->step = M1_PARSE_FRAME_DATA;
                     M1_STATS_RX_NODE_CRC8_OK(node);
                 } else {
@@ -209,7 +211,8 @@ static void m1_frame_parse(m1_rx_parse_node_t* node, u8* buf, size_t len) {
             } else {
                 parse->cache[parse->index] = buf[i];
                 parse->index++;
-                if (crc16_find_tab_pack_check(parse->cache, frame_len)) {
+                if (crc16_lookup_verify_buf(CRC16_MODBUS_LOOKUP_MODEL,
+                                            parse->cache, frame_len)) {
                     m1_network_receive(parse->cache, frame_len);
                     M1_STATS_RX_NODE_CRC16_OK(node);
                 } else {

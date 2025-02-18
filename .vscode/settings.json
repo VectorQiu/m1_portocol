@@ -19,7 +19,9 @@
         "rtcompiler.h": "c",
         "single_list_ex.h": "c",
         "single_list.h": "c",
-        "memory_pool.h": "c"
+        "memory_pool.h": "c",
+        "crc8_lookup.h": "c",
+        "stdbool.h": "c"
     },
     //
     "editor.fontSize": 16,
