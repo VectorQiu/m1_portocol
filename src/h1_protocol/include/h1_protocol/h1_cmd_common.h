@@ -49,25 +49,97 @@ extern "C" {
  */
 
 /* Public definitions ------------------------------------------------------- */
-#define H1_CMD_ID_PING (0x00)
+#define H1_CMD_ID_PING              (0x00)
+#define H1_CMD_ID_SET_MODULE_STATUS (0x10)
+#define H1_CMD_ID_GET_MODULE_STATUS (0x11)
+#define H1_CMD_ID_SET_DEVICE_INFO   (0x12)
+#define H1_CMD_ID_GET_DEVICE_INFO   (0x13)
 
 /* Public typedefs ---------------------------------------------------------- */
 #pragma pack(1)
 
 typedef struct {
-    uint8_t size;
-    uint8_t data[];
+    u8 size;
+    u8 data[];
 } h1_cmd_ping_req_t;
 
 typedef struct {
-    uint8_t size;
-    uint8_t data[];
+    u8 size;
+    u8 data[];
 } h1_cmd_ping_resp_t;
+
+typedef enum {
+    H1_MODULE_ID_NONE = 0,
+} h1_module_id_t;
+
+typedef struct {
+    u8 id;     /*模块ID*/
+    u8 status; /*模块状态*/
+    i32 args;  /*模块状态补充参数*/
+} h1_set_module_status_req_t;
+
+typedef struct {
+    u8 result; /*0 成功 other 失败*/
+    u8 id;     /*模块ID*/
+} h1_set_module_status_resp_t;
+
+typedef struct {
+    u8 id; /*模块ID*/
+} h1_get_module_status_req_t;
+
+typedef struct {
+    u8 result; /*0 成功 other 失败*/
+    u8 id;     /*模块ID*/
+    u8 status; /*模块状态*/
+    i32 args;  /*模块状态补充参数*/
+} h1_get_module_status_resp_t;
+
+typedef enum {
+    H1_DEVICE_INFO_ID_NONE = 0,
+} h1_device_info_id_t;
+
+typedef struct {
+    u8 id;
+    u8 size;
+    u8 data[];
+} h1_set_device_info_req_t;
+
+typedef struct {
+    u8 result;
+    u8 id;
+} h1_set_device_info_resp_t;
+
+typedef struct {
+    u8 id;
+} h1_get_device_info_req_t;
+
+typedef struct {
+    u8 result;
+    u8 id;
+    u8 size;
+    u8 data[];
+} h1_get_device_info_resp_t;
 
 #pragma pack()
 /* Public functions --------------------------------------------------------- */
-etype_e h1_cmd_ping_req(void* data);
-etype_e h1_cmd_ping_resp(void* data);
+etype_e h1_cmd_ping_req(void* param, void* data);
+etype_e h1_cmd_ping_resp(void* param, void* data);
+
+etype_e h1_cmd_set_module_status_req(void* param, void* data);
+etype_e h1_cmd_set_module_status_resp(void* param, void* data);
+etype_e h1_cmd_get_module_status_req(void* param, void* data);
+etype_e h1_cmd_get_module_status_resp(void* param, void* data);
+
+etype_e h1_cmd_set_device_info_req(void* param, void* data);
+etype_e h1_cmd_set_device_info_resp(void* param, void* data);
+etype_e h1_cmd_get_device_info_req(void* param, void* data);
+etype_e h1_cmd_get_device_info_resp(void* param, void* data);
+
+etype_e h1_set_module_status(u8 target_id, h1_set_module_status_req_t* req);
+etype_e h1_get_module_status(u8 target_id, h1_get_module_status_req_t* req);
+
+etype_e h1_set_device_info(u8 target_id, h1_set_device_info_req_t* req);
+etype_e h1_get_device_info(u8 target_id, h1_get_device_info_req_t* req);
 
 /**
  * \}

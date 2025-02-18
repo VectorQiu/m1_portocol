@@ -42,14 +42,45 @@
 /* Private function prototypes ---------------------------------------------- */
 
 /* Private variables -------------------------------------------------------- */
+// clang-format on
 h1_callback_table_t h1_callback_table[] = {
-    {H1_PROTO_TYPE_COMMON, H1_CMD_ID_PING, h1_cmd_ping_req, h1_cmd_ping_resp},
+    {
+        H1_PROTO_TYPE_COMMON,
+        H1_CMD_ID_PING,
+        h1_cmd_ping_req,
+        h1_cmd_ping_resp,
+    },
+    {
+        H1_PROTO_TYPE_COMMON,
+        H1_CMD_ID_SET_MODULE_STATUS,
+        h1_cmd_set_module_status_req,
+        h1_cmd_set_module_status_resp,
+    },
+    {
+        H1_PROTO_TYPE_COMMON,
+        H1_CMD_ID_GET_MODULE_STATUS,
+        h1_cmd_get_module_status_req,
+        h1_cmd_get_module_status_resp,
+    },
+    {
+        H1_PROTO_TYPE_COMMON,
+        H1_CMD_ID_SET_DEVICE_INFO,
+        h1_cmd_set_device_info_req,
+        h1_cmd_set_device_info_resp,
+    },
+    {
+        H1_PROTO_TYPE_COMMON,
+        H1_CMD_ID_GET_DEVICE_INFO,
+        h1_cmd_get_device_info_req,
+        h1_cmd_get_device_info_resp,
+    },
 };
+// clang-format on
 
 /* Public variables --------------------------------------------------------- */
 
 /* Public functions --------------------------------------------------------- */
-void h1_cmd_callback_handle(void* data) {
+void h1_cmd_callback_handle(void* param, void* data) {
     m1_rx_data_t* rx_data = data;
     if (rx_data->data_len < sizeof(h1_frame_head_t)) {
         return;
@@ -61,11 +92,11 @@ void h1_cmd_callback_handle(void* data) {
             && (head->cmd_id == h1_callback_table[i].cmd_id)) {
             if (head->send_attr == H1_PROTO_SEND_ATTR_REQ) {
                 if (h1_callback_table[i].req_handle) {
-                    h1_callback_table[i].req_handle(data);
+                    h1_callback_table[i].req_handle(param, data);
                 }
             } else if (head->send_attr == H1_PROTO_SEND_ATTR_RESP) {
                 if (h1_callback_table[i].resp_handle) {
-                    h1_callback_table[i].resp_handle(data);
+                    h1_callback_table[i].resp_handle(param, data);
                 }
             }
         }

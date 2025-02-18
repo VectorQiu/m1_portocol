@@ -280,7 +280,7 @@ void m1_callback(m1_rx_data_t* rx) {
 void h1_protocol_callback(m1_rx_data_t* rx) {
     printf("source id: 0x%x target id: 0x%x\n", rx->source_id, rx->target_id);
     LOG_HEX("h1_protocol_callback", 10, rx->data, rx->data_len);
-    h1_cmd_callback_handle(rx);
+    h1_cmd_callback_handle(NULL, rx);
 }
 
 /* ----------------------------- end of file -------------------------------- */

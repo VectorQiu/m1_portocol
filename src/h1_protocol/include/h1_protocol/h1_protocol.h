@@ -50,7 +50,7 @@ extern "C" {
  */
 
 /* Public functions --------------------------------------------------------- */
-void h1_cmd_callback_handle(void* data);
+void h1_cmd_callback_handle(void* param, void* data);
 
 etype_e h1_protocol_tx_data(u8 source_id, u8 target_id, bool reliable_tx,
                             u8* data, size_t data_len);

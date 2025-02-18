@@ -80,6 +80,8 @@
         "build",
         "vscode",
         "m1_protocol",
+        "crc",
+        "h1_protocol"
     ],
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.doxygen.generateOnType": false,

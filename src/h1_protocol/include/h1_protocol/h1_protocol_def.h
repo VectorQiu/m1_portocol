@@ -54,11 +54,11 @@ extern "C" {
 #define HOST_ID_MASTER (0x10)
 #define HOST_ID_SLAVE  (0x11)
 #define HOST_ID_PC     (0x12)
+#define HOST_ID_SOURCE HOST_ID_PC
 
 /* Public typedefs ---------------------------------------------------------- */
 typedef enum {
     H1_PROTO_TYPE_COMMON = 0,
-    M1_PROTO_TYPE_PILLOW = 1,
 } h1_protocol_type_e;
 
 typedef enum h1_send_attr {
@@ -88,11 +88,13 @@ typedef struct h1_frame_head {
 typedef struct {
     u8 cmd_type;
     u8 cmd_id;
-    etype_e (*req_handle)(void* data);
-    etype_e (*resp_handle)(void* data);
+    etype_e (*req_handle)(void* param, void* data);
+    etype_e (*resp_handle)(void* param, void* data);
 } h1_callback_table_t;
 
 /* Public functions --------------------------------------------------------- */
+extern etype_e h1_protocol_tx_data(u8 source_id, u8 target_id, bool reliable_tx,
+                                   u8* data, size_t data_len);
 #define H1_FRAME_PARSE(rx_data, data, frame_head, frame_data, frame_type)      \
     m1_rx_data_t* rx_data = data;                                              \
     h1_frame_head_t* frame_head = (h1_frame_head_t*)rx_data->data;             \
@@ -101,39 +103,39 @@ typedef struct {
     (void)frame_head;                                                          \
     (void)frame_data;
 
-#define H1_SEND(source_id, target_id, reliable_tx, data, data_type, cmd_type,  \
-                cmd_id, req_attr, resp_attr)                                   \
+#define H1_SEND(_source_id, _target_id, _reliable_tx, _data, _data_type,       \
+                _cmd_type, _cmd_id, _req_attr, _resp_attr)                     \
     do {                                                                       \
-        u8 frame_buf[sizeof(h1_frame_head_t) + sizeof(data_type)] = {0};       \
-        h1_frame_head_t* frame_head = (h1_frame_head_t*)buffer;                \
-        frame_head->send_attr = req_attr;                                      \
-        frame_head->resp_attr = resp_attr;                                     \
-        frame_head->cmd_type = cmd_type;                                       \
-        frame_head->cmd_id = cmd_id;                                           \
-        memcpy(frame_head->data, req, sizeof(req_type));                       \
-        h1_protocol_tx_data(source_id, target_id, reliable_tx, frame_buf,      \
-                            sizeof(frame_buf));                                \
+        u8 _frame_buf[sizeof(h1_frame_head_t) + sizeof(_data_type)] = {0};     \
+        h1_frame_head_t* _frame_head = (h1_frame_head_t*)_frame_buf;           \
+        _frame_head->send_attr = _req_attr;                                    \
+        _frame_head->resp_attr = _resp_attr;                                   \
+        _frame_head->cmd_type = _cmd_type;                                     \
+        _frame_head->cmd_id = _cmd_id;                                         \
+        memcpy(_frame_head->data, _data, sizeof(_data_type));                  \
+        h1_protocol_tx_data(_source_id, _target_id, _reliable_tx, _frame_buf,  \
+                            sizeof(_frame_buf));                               \
     } while (0)
 
-#define H1_SEND_REQ(source_id, target_id, data, data_type, cmd_type, cmd_id,   \
-                    resp_attr)                                                 \
-    H1_SEND(source_id, target_id, false, data, data_type, cmd_type, cmd_id,    \
-            H1_PROTO_SEND_ATTR_REQ, resp_attr)
+#define H1_SEND_REQ(_source_id, _target_id, _data, _data_type, _cmd_type,      \
+                    _cmd_id, _resp_attr)                                       \
+    H1_SEND(_source_id, _target_id, false, _data, _data_type, _cmd_type,       \
+            _cmd_id, H1_PROTO_SEND_ATTR_REQ, _resp_attr)
 
-#define H1_SEND_RELIABLE_REQ(source_id, target_id, data, data_type, cmd_type,  \
-                             cmd_id, resp_attr)                                \
-    H1_SEND(source_id, target_id, true, data, data_type, cmd_type, cmd_id,     \
-            H1_PROTO_SEND_ATTR_REQ, resp_attr)
+#define H1_SEND_RELIABLE_REQ(_source_id, _target_id, _data, _data_type,        \
+                             _cmd_type, _cmd_id, _resp_attr)                   \
+    H1_SEND(_source_id, _target_id, true, _data, _data_type, _cmd_type,        \
+            _cmd_id, H1_PROTO_SEND_ATTR_REQ, _resp_attr)
 
-#define H1_SEND_RESP(source_id, target_id, data, data_type, cmd_type, cmd_id,  \
-                     resp_attr)                                                \
-    H1_SEND(source_id, target_id, false, data, data_type, cmd_type, cmd_id,    \
-            H1_PROTO_SEND_ATTR_RESP, resp_attr)
+#define H1_SEND_RESP(_source_id, _target_id, _data, _data_type, _cmd_type,     \
+                     _cmd_id, _resp_attr)                                      \
+    H1_SEND(_source_id, _target_id, false, _data, _data_type, _cmd_type,       \
+            _cmd_id, H1_PROTO_SEND_ATTR_RESP, _resp_attr)
 
-#define H1_SEND_RELIABLE_RESP(source_id, target_id, data, data_type, cmd_type, \
-                              cmd_id, resp_attr)                               \
-    H1_SEND(source_id, target_id, true, data, data_type, cmd_type, cmd_id,     \
-            H1_PROTO_SEND_ATTR_RESP, resp_attr)
+#define H1_SEND_RELIABLE_RESP(_source_id, _target_id, _data, _data_type,       \
+                              _cmd_type, _cmd_id, _resp_attr)                  \
+    H1_SEND(_source_id, _target_id, true, _data, _data_type, _cmd_type,        \
+            _cmd_id, H1_PROTO_SEND_ATTR_RESP, _resp_attr)
 /**
  * \}
  */
