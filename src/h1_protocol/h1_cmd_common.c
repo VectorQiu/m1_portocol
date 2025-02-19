@@ -68,12 +68,12 @@ etype_e h1_cmd_set_module_status_req(void* param, void* data) {
     resp.id = req->id;
     resp.result = 1;
     switch (req->id) {
-    case H1_MODULE_ID_NONE:
-        /* code */
-        break;
+        case H1_MODULE_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     H1_SEND_RESP(rx_data->target_id, rx_data->source_id, &resp,
@@ -98,12 +98,12 @@ etype_e h1_cmd_get_module_status_req(void* param, void* data) {
     resp.id = req->id;
     resp.result = 1;
     switch (req->id) {
-    case H1_MODULE_ID_NONE:
-        /* code */
-        break;
+        case H1_MODULE_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     H1_SEND_RESP(rx_data->target_id, rx_data->source_id, &resp,
@@ -122,12 +122,12 @@ etype_e h1_cmd_get_module_status_resp(void* param, void* data) {
     }
 
     switch (resp->id) {
-    case H1_MODULE_ID_NONE:
-        /* code */
-        break;
+        case H1_MODULE_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     return E_STATE_OK;
@@ -142,12 +142,12 @@ etype_e h1_cmd_set_device_info_req(void* param, void* data) {
     resp.result = 1;
 
     switch (req->id) {
-    case H1_DEVICE_INFO_ID_NONE:
-        /* code */
-        break;
+        case H1_DEVICE_INFO_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
     H1_SEND_RESP(rx_data->target_id, rx_data->source_id, &resp,
                  h1_set_device_info_resp_t, frame_head->cmd_type,
@@ -158,7 +158,6 @@ etype_e h1_cmd_set_device_info_req(void* param, void* data) {
 etype_e h1_cmd_set_device_info_resp(void* param, void* data) {
     (void)param;
     H1_FRAME_PARSE(rx_data, data, frame_head, resp, h1_set_device_info_resp_t);
-
 
     return E_STATE_OK;
 }
@@ -180,12 +179,12 @@ etype_e h1_cmd_get_device_info_req(void* param, void* data) {
     resp->id = req->id;
     resp->result = 1;
     switch (req->id) {
-    case H1_DEVICE_INFO_ID_NONE:
-        /* code */
-        break;
+        case H1_DEVICE_INFO_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     if (strlen((char*)resp->data) > 0) {
@@ -203,18 +202,18 @@ etype_e h1_cmd_get_device_info_resp(void* param, void* data) {
     (void)param;
     H1_FRAME_PARSE(rx_data, data, frame_head, resp, h1_get_device_info_resp_t);
 
-    if (!(resp->result = 0 && resp->size > 0
-                         && strlen((char*)resp->data) > 0)) {
+    if (!(resp->result =
+              0 && resp->size > 0 && strlen((char*)resp->data) > 0)) {
         return E_STATE_ERROR;
     }
 
     switch (resp->id) {
-    case H1_DEVICE_INFO_ID_NONE:
-        /* code */
-        break;
+        case H1_DEVICE_INFO_ID_NONE:
+            /* code */
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     return E_STATE_OK;

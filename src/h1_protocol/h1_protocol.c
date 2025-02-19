@@ -88,8 +88,8 @@ void h1_cmd_callback_handle(void* param, void* data) {
 
     h1_frame_head_t* head = (h1_frame_head_t*)(rx_data->data);
     for (size_t i = 0; i < ARRAY_SIZE(h1_callback_table); i++) {
-        if ((head->cmd_type == h1_callback_table[i].cmd_type)
-            && (head->cmd_id == h1_callback_table[i].cmd_id)) {
+        if ((head->cmd_type == h1_callback_table[i].cmd_type) &&
+            (head->cmd_id == h1_callback_table[i].cmd_id)) {
             if (head->send_attr == H1_PROTO_SEND_ATTR_REQ) {
                 if (h1_callback_table[i].req_handle) {
                     h1_callback_table[i].req_handle(param, data);

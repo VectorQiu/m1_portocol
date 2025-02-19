@@ -99,14 +99,14 @@ etype_e m1_transport_receive(u8* frame_buf, size_t frame_len) {
     }
 
     size_t rx_data_len =
-        frame_head->data_len_msb << 8
-        | frame_head->data_len_lsb; /*!< Calculate received data length */
+        frame_head->data_len_msb << 8 |
+        frame_head->data_len_lsb; /*!< Calculate received data length */
     m1_rx_data_t rx_data = {
         .source_id = frame_head->source_id,
         .target_id = frame_head->target_id,
         .data_len = rx_data_len,
-        .data = frame_buf
-                + sizeof(m1_frame_head_t), /*!< Extract data pointer */
+        .data =
+            frame_buf + sizeof(m1_frame_head_t), /*!< Extract data pointer */
     };
 
     if (frame_head->data_type >= M1_DATA_TYPE_MAX) {
@@ -189,8 +189,8 @@ etype_e m1_transport_send(m1_tx_data_t* tx_data) {
                 }
             }
             /*! Allocate memory for acknowledgment waiting packet */
-            m1_packet_t* wait_ack_packet = (m1_packet_t*)MemoryPoolAlloc(
-                m1.tx_pool, sizeof(m1_packet_t));
+            m1_packet_t* wait_ack_packet =
+                (m1_packet_t*)MemoryPoolAlloc(m1.tx_pool, sizeof(m1_packet_t));
             if (!wait_ack_packet) {
                 break; /*!< Exit loop if memory allocation fails */
             }
@@ -298,9 +298,9 @@ static etype_e process_acknowledgment(m1_frame_head_t* frame_head) {
     while (current_node) {
         m1_packet_t* packet = single_list_entry(
             current_node, m1_packet_t, node); /*!< Get packet from node */
-        if (packet->seq_num == frame_head->ack_num
-            && packet->target_id == frame_head->source_id
-            && packet->source_id == frame_head->target_id) {
+        if (packet->seq_num == frame_head->ack_num &&
+            packet->target_id == frame_head->source_id &&
+            packet->source_id == frame_head->target_id) {
             link_info(
                 "receiver reliable ack from 0x%02x",
                 frame_head->source_id); /*!< Log acknowledgment received */
@@ -361,9 +361,9 @@ static m1_packet_data_t* allocate_ack_data(m1_packet_data_t* src_data) {
         return NULL; /*!< Return NULL if memory allocation fails */
     }
 
-    ack_data->data = (u8*)ack_data
-                     + sizeof(m1_packet_data_t); /*!< Assign data pointer */
-    ack_data->data_len = src_data->data_len;     /*!< Set data length */
+    ack_data->data =
+        (u8*)ack_data + sizeof(m1_packet_data_t); /*!< Assign data pointer */
+    ack_data->data_len = src_data->data_len;      /*!< Set data length */
     memcpy(ack_data->data, src_data->data,
            src_data->data_len);      /*!< Copy data */
     ack_data->reference_counter = 0; /*!< Initialize reference counter */

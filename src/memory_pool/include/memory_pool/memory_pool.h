@@ -5,18 +5,18 @@
 #include <pthread.h>
 #endif
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #define mem_size_t unsigned int
-#define KB (mem_size_t)(1 << 10)
-#define MB (mem_size_t)(1 << 20)
-#define GB (mem_size_t)(1 << 30)
+#define KB         (mem_size_t)(1 << 10)
+#define MB         (mem_size_t)(1 << 20)
+#define GB         (mem_size_t)(1 << 30)
 
 typedef struct _mp_chunk {
     mem_size_t alloc_mem;
@@ -27,9 +27,11 @@ typedef struct _mp_chunk {
 typedef struct _mp_mempool_list {
     char* start;
     unsigned int id;
-    mem_size_t mempool_size;       // 固定值 每个内存池最大内存
-    mem_size_t alloc_mem;          // 统计值 当前池内已分配的内存总大小
-    mem_size_t alloc_prog_mem;     // 统计值 当前池内实际分配给应用程序的内存总大小(减去内存管理元信息)
+    mem_size_t mempool_size; // 固定值 每个内存池最大内存
+    mem_size_t alloc_mem;    // 统计值 当前池内已分配的内存总大小
+    mem_size_t
+        alloc_prog_mem; // 统计值
+                        // 当前池内实际分配给应用程序的内存总大小(减去内存管理元信息)
     _MP_Chunk *free_list, *alloc_list;
     struct _mp_mempool_list* next;
 } _MP_Memory;
@@ -53,9 +55,7 @@ typedef struct _mp_mempool {
 // 所有Memory的数量
 void get_memory_list_count(MemoryPool* mp, mem_size_t* mlist_len);
 // 每个Memory的统计信息
-void get_memory_info(MemoryPool* mp,
-                     _MP_Memory* mm,
-                     mem_size_t* free_list_len,
+void get_memory_info(MemoryPool* mp, _MP_Memory* mm, mem_size_t* free_list_len,
                      mem_size_t* alloc_list_len);
 int get_memory_id(_MP_Memory* mm);
 
@@ -87,4 +87,4 @@ float MemoryPoolGetProgUsage(MemoryPool* mp);
 }
 #endif /* __cplusplus */
 
-#endif  // !_Z_MEMORYPOOL_H_
+#endif // !_Z_MEMORYPOOL_H_

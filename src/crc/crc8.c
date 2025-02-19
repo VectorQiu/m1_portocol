@@ -39,42 +39,42 @@
 /* Public functions --------------------------------------------------------- */
 void crc8_init(crc8_ctx_t* ctx, crc8_param_model_e model) {
     switch (model) {
-    case CRC8_MODEL:          // Standard CRC-8
-        ctx->init = 0x00;     // Initial value
-        ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x00;  // Final XOR value
-        ctx->ref_in = false;  // Do not reverse input bits
-        ctx->ref_out = false; // Do not reverse output bits
-        break;
-    case CRC8_ITU_MODEL:      // CRC-8 ITU
-        ctx->init = 0x00;     // Initial value
-        ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x55;  // Final XOR value
-        ctx->ref_in = false;  // Do not reverse input bits
-        ctx->ref_out = false; // Do not reverse output bits
-        break;
-    case CRC8_ROHC_MODEL:    // CRC-8 ROHC
-        ctx->init = 0xFF;    // Initial value
-        ctx->poly = 0x07;    // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x00; // Final XOR value
-        ctx->ref_in = true;  // Reverse input bits
-        ctx->ref_out = true; // Reverse output bits
-        break;
-    case CRC8_MAXIM_MODEL:   // CRC-8 Maxim/Dallas
-        ctx->init = 0x00;    // Initial value
-        ctx->poly = 0x31;    // Polynomial (x^8 + x^5 + x^4 + 1)
-        ctx->xor_out = 0x00; // Final XOR value
-        ctx->ref_in = true;  // Reverse input bits
-        ctx->ref_out = true; // Reverse output bits
-        break;
-    case CRC8_NONE_MODEL: // No CRC (dummy)
-    default:
-        ctx->init = 0x00;     // Default initial value
-        ctx->poly = 0x00;     // Default polynomial (no operation)
-        ctx->xor_out = 0x00;  // Default XOR value
-        ctx->ref_in = false;  // Do not reverse input bits
-        ctx->ref_out = false; // Do not reverse output bits
-        break;
+        case CRC8_MODEL:          // Standard CRC-8
+            ctx->init = 0x00;     // Initial value
+            ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x00;  // Final XOR value
+            ctx->ref_in = false;  // Do not reverse input bits
+            ctx->ref_out = false; // Do not reverse output bits
+            break;
+        case CRC8_ITU_MODEL:      // CRC-8 ITU
+            ctx->init = 0x00;     // Initial value
+            ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x55;  // Final XOR value
+            ctx->ref_in = false;  // Do not reverse input bits
+            ctx->ref_out = false; // Do not reverse output bits
+            break;
+        case CRC8_ROHC_MODEL:    // CRC-8 ROHC
+            ctx->init = 0xFF;    // Initial value
+            ctx->poly = 0x07;    // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x00; // Final XOR value
+            ctx->ref_in = true;  // Reverse input bits
+            ctx->ref_out = true; // Reverse output bits
+            break;
+        case CRC8_MAXIM_MODEL:   // CRC-8 Maxim/Dallas
+            ctx->init = 0x00;    // Initial value
+            ctx->poly = 0x31;    // Polynomial (x^8 + x^5 + x^4 + 1)
+            ctx->xor_out = 0x00; // Final XOR value
+            ctx->ref_in = true;  // Reverse input bits
+            ctx->ref_out = true; // Reverse output bits
+            break;
+        case CRC8_NONE_MODEL: // No CRC (dummy)
+        default:
+            ctx->init = 0x00;     // Default initial value
+            ctx->poly = 0x00;     // Default polynomial (no operation)
+            ctx->xor_out = 0x00;  // Default XOR value
+            ctx->ref_in = false;  // Do not reverse input bits
+            ctx->ref_out = false; // Do not reverse output bits
+            break;
     }
 }
 

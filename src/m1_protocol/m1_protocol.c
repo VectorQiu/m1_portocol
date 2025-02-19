@@ -105,8 +105,8 @@ etype_e m1_protocol_init(const char name[], size_t tx_pool_size,
                          m1_rx_parse_callback_item_t* rx_cb_table,
                          size_t rx_cb_len, u8* source_id,
                          size_t source_id_len) {
-    if (!(tx_pool_size && route_table && route_len && rx_cb_table && rx_cb_len
-          && source_id && source_id_len)) {
+    if (!(tx_pool_size && route_table && route_len && rx_cb_table &&
+          rx_cb_len && source_id && source_id_len)) {
         return E_STATE_INVAL;
     }
 
@@ -216,8 +216,8 @@ static etype_e append_rx_parse_node(m1_route_item_t* route) {
 
     memset(rx_parse_node, 0, sizeof(m1_rx_parse_node_t));
     rx_parse_node->item.parse.cache_len = BYTES_ALIGN(route->max_pkg_size, 4);
-    rx_parse_node->item.parse.cache = m1_malloc(
-        rx_parse_node->item.parse.cache_len);
+    rx_parse_node->item.parse.cache =
+        m1_malloc(rx_parse_node->item.parse.cache_len);
     if (!rx_parse_node->item.parse.cache) {
         m1_free(rx_parse_node);
         return E_STATE_NO_SPACE;
@@ -239,8 +239,8 @@ static etype_e append_rx_parse_node(m1_route_item_t* route) {
 static bool is_rx_node_existed(m1_route_item_t* route) {
     single_list_t* rx_parse_node = m1.rx_parse_head.next;
     while (rx_parse_node) {
-        m1_rx_parse_node_t* ops = single_list_entry(rx_parse_node,
-                                                    m1_rx_parse_node_t, node);
+        m1_rx_parse_node_t* ops =
+            single_list_entry(rx_parse_node, m1_rx_parse_node_t, node);
         if (route->rx == ops->item.rx) {
             return true;
         }

@@ -63,8 +63,8 @@ void m1_datalink_receive(u32 freq) {
 
     single_list_t* rx_parse_node = m1.rx_parse_head.next;
     while (rx_parse_node) {
-        m1_rx_parse_node_t* ops = single_list_entry(rx_parse_node,
-                                                    m1_rx_parse_node_t, node);
+        m1_rx_parse_node_t* ops =
+            single_list_entry(rx_parse_node, m1_rx_parse_node_t, node);
         size_t rx_len = m1.datalink_rx_buf_len;
         if (run_cnt % (freq / ops->item.read_freq) == 0) {
             etype_e ret = ops->item.rx->rx(rx_buf, &rx_len);
@@ -88,8 +88,8 @@ void m1_datalink_receive(u32 freq) {
  */
 etype_e m1_datalink_send(m1_packet_t* packet) {
     etype_e ret = E_STATE_OK;
-    size_t frame_len = sizeof(m1_frame_head_t) + packet->data->data_len
-                       + sizeof(u16);
+    size_t frame_len =
+        sizeof(m1_frame_head_t) + packet->data->data_len + sizeof(u16);
     u8* frame_buf = (u8*)MemoryPoolAlloc(m1.tx_pool, frame_len);
     if (frame_buf == NULL) {
         /** Memory allocation failed. */
@@ -157,73 +157,74 @@ static void m1_frame_parse(m1_rx_parse_node_t* node, u8* buf, size_t len) {
     M1_STATS_RX_NODE_TOTAL_BYTES(node, len);
     for (size_t i = 0; i < len; i++) {
         switch (parse->step) {
-        case M1_PARSE_FRAME_SOF:
-            if (buf[i] == M1_FRAME_HEAD_SOF) {
-                parse->step = M1_PARSE_FRAME_HEAD;
-                parse->index = 0;
-                memset(parse->cache, 0, parse->cache_len);
-                parse->cache[parse->index] = buf[i];
-                parse->index++;
-                M1_STATS_RX_NODE_SOF_OK(node);
-            } else {
-                M1_STATS_RX_NODE_NOT_FRAME_BYTES(node);
-            }
-            break;
-
-        case M1_PARSE_FRAME_HEAD:
-            if (parse->index < sizeof(m1_frame_head_t) - 1) {
-                parse->cache[parse->index] = buf[i];
-                parse->index++;
-            } else { /* head crc8 */
-                parse->cache[parse->index] = buf[i];
-                parse->index++;
-                if (crc8_lookup_verify_buf(CRC8_MAXIM_LOOKUP_MODEL,
-                                           parse->cache,
-                                           sizeof(m1_frame_head_t))) {
-                    parse->step = M1_PARSE_FRAME_DATA;
-                    M1_STATS_RX_NODE_CRC8_OK(node);
-                } else {
-                    parse->step = M1_PARSE_FRAME_SOF;
-                    M1_STATS_RX_NODE_CRC8_ERR(node);
-                }
-            }
-            break;
-
-        case M1_PARSE_FRAME_DATA:
-            frame_head = (m1_frame_head_t*)parse->cache;
-            data_len = frame_head->data_len_msb << 8 | frame_head->data_len_lsb;
-            frame_len = sizeof(m1_frame_head_t) + data_len + sizeof(u16);
-
-            /* Check if the cache can hold the entire frame */
-            if (frame_len > parse->cache_len) {
-                if (parse->index < frame_len - 1) {
+            case M1_PARSE_FRAME_SOF:
+                if (buf[i] == M1_FRAME_HEAD_SOF) {
+                    parse->step = M1_PARSE_FRAME_HEAD;
+                    parse->index = 0;
+                    memset(parse->cache, 0, parse->cache_len);
+                    parse->cache[parse->index] = buf[i];
                     parse->index++;
+                    M1_STATS_RX_NODE_SOF_OK(node);
                 } else {
-                    parse->step = M1_PARSE_FRAME_SOF;
-                    M1_STATS_RX_NODE_LEN_OVERFLOW(node);
+                    M1_STATS_RX_NODE_NOT_FRAME_BYTES(node);
                 }
                 break;
-            }
 
-            if (parse->index < frame_len - 1) {
-                parse->cache[parse->index] = buf[i];
-                parse->index++;
-            } else {
-                parse->cache[parse->index] = buf[i];
-                parse->index++;
-                if (crc16_lookup_verify_buf(CRC16_MODBUS_LOOKUP_MODEL,
-                                            parse->cache, frame_len)) {
-                    m1_network_receive(parse->cache, frame_len);
-                    M1_STATS_RX_NODE_CRC16_OK(node);
-                } else {
-                    M1_STATS_RX_NODE_CRC16_ERR(node);
+            case M1_PARSE_FRAME_HEAD:
+                if (parse->index < sizeof(m1_frame_head_t) - 1) {
+                    parse->cache[parse->index] = buf[i];
+                    parse->index++;
+                } else { /* head crc8 */
+                    parse->cache[parse->index] = buf[i];
+                    parse->index++;
+                    if (crc8_lookup_verify_buf(CRC8_MAXIM_LOOKUP_MODEL,
+                                               parse->cache,
+                                               sizeof(m1_frame_head_t))) {
+                        parse->step = M1_PARSE_FRAME_DATA;
+                        M1_STATS_RX_NODE_CRC8_OK(node);
+                    } else {
+                        parse->step = M1_PARSE_FRAME_SOF;
+                        M1_STATS_RX_NODE_CRC8_ERR(node);
+                    }
                 }
-                parse->step = M1_PARSE_FRAME_SOF;
-            }
-            break;
+                break;
 
-        default:
-            break;
+            case M1_PARSE_FRAME_DATA:
+                frame_head = (m1_frame_head_t*)parse->cache;
+                data_len =
+                    frame_head->data_len_msb << 8 | frame_head->data_len_lsb;
+                frame_len = sizeof(m1_frame_head_t) + data_len + sizeof(u16);
+
+                /* Check if the cache can hold the entire frame */
+                if (frame_len > parse->cache_len) {
+                    if (parse->index < frame_len - 1) {
+                        parse->index++;
+                    } else {
+                        parse->step = M1_PARSE_FRAME_SOF;
+                        M1_STATS_RX_NODE_LEN_OVERFLOW(node);
+                    }
+                    break;
+                }
+
+                if (parse->index < frame_len - 1) {
+                    parse->cache[parse->index] = buf[i];
+                    parse->index++;
+                } else {
+                    parse->cache[parse->index] = buf[i];
+                    parse->index++;
+                    if (crc16_lookup_verify_buf(CRC16_MODBUS_LOOKUP_MODEL,
+                                                parse->cache, frame_len)) {
+                        m1_network_receive(parse->cache, frame_len);
+                        M1_STATS_RX_NODE_CRC16_OK(node);
+                    } else {
+                        M1_STATS_RX_NODE_CRC16_ERR(node);
+                    }
+                    parse->step = M1_PARSE_FRAME_SOF;
+                }
+                break;
+
+            default:
+                break;
         }
     }
 }

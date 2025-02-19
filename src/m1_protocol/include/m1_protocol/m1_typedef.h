@@ -62,15 +62,15 @@ extern "C" {
 #define link_raw(...) printf(__VA_ARGS__)
 #define link_hex(name, width, buf, size)                                       \
     do {                                                                       \
-        link_raw("%s:\n", name);                                                \
+        link_raw("%s:\n", name);                                               \
         for (size_t i = 0; i < size; i++) {                                    \
-            link_raw("%02X ", ((unsigned char*)buf)[i]);                        \
+            link_raw("%02X ", ((unsigned char*)buf)[i]);                       \
             if ((i + 1) % width == 0) {                                        \
-                link_raw("\n");                                                 \
+                link_raw("\n");                                                \
             }                                                                  \
         }                                                                      \
         if (size % width != 0) {                                               \
-            link_raw("\n");                                                     \
+            link_raw("\n");                                                    \
         }                                                                      \
     } while (0)
 
@@ -138,8 +138,8 @@ typedef volatile uint8_t vu8;
  * \return          The 32-bit integer after the byte order swap.
  */
 #define SWAP32(x)                                                              \
-    (((x) >> 24) | (((x) & 0x00FF0000) >> 8) | (((x) & 0x0000FF00) << 8)       \
-     | ((x) << 24))
+    (((x) >> 24) | (((x) & 0x00FF0000) >> 8) | (((x) & 0x0000FF00) << 8) |     \
+     ((x) << 24))
 #endif
 
 #ifndef BIT

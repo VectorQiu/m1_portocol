@@ -53,38 +53,38 @@ static const uint32_t crc32_poly_0x04C11DB7_table[16] = {
 void crc32_lookup_init(crc32_lookup_ctx_t* ctx,
                        crc32_lookup_param_model_e model) {
     switch (model) {
-    case CRC32_LOOKUP_MODEL:    // CRC-32
-        ctx->init = 0xFFFFFFFF; // Initial value
-        ctx->poly =
-            0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 + x^16 + x^12 +
-                        // x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1)
-        ctx->xor_out = 0xFFFFFFFF; // Final XOR value
-        ctx->ref_in = true;        // Reverse input bits
-        ctx->ref_out = true;       // Reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint32_t*)crc32_poly_0x04C11DB7_table;
-        break;
+        case CRC32_LOOKUP_MODEL:    // CRC-32
+            ctx->init = 0xFFFFFFFF; // Initial value
+            ctx->poly = 0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 +
+                                    // x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
+                                    // x^5 + x^4 + x^2 + x + 1)
+            ctx->xor_out = 0xFFFFFFFF; // Final XOR value
+            ctx->ref_in = true;        // Reverse input bits
+            ctx->ref_out = true;       // Reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint32_t*)crc32_poly_0x04C11DB7_table;
+            break;
 
-    case CRC32_MPEG2_LOOKUP_MODEL: // CRC-32 MPEG-2
-        ctx->init = 0xFFFFFFFF;    // Initial value
-        ctx->poly =
-            0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 + x^16 + x^12 +
-                        // x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1)
-        ctx->xor_out = 0x00000000; // Final XOR value
-        ctx->ref_in = false;       // Do not reverse input bits
-        ctx->ref_out = false;      // Do not reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint32_t*)crc32_poly_0x04C11DB7_table;
-        break;
+        case CRC32_MPEG2_LOOKUP_MODEL: // CRC-32 MPEG-2
+            ctx->init = 0xFFFFFFFF;    // Initial value
+            ctx->poly = 0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 +
+                                    // x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
+                                    // x^5 + x^4 + x^2 + x + 1)
+            ctx->xor_out = 0x00000000; // Final XOR value
+            ctx->ref_in = false;       // Do not reverse input bits
+            ctx->ref_out = false;      // Do not reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint32_t*)crc32_poly_0x04C11DB7_table;
+            break;
 
-    case CRC32_NONE_LOOKUP_MODEL: // No CRC (dummy)
-    default:
-        ctx->init = 0x00000000;    // Default initial value
-        ctx->poly = 0x00000000;    // Default polynomial (no operation)
-        ctx->xor_out = 0x00000000; // Default XOR value
-        ctx->ref_in = false;       // Do not reverse input bits
-        ctx->ref_out = false;      // Do not reverse output bits
-        break;
+        case CRC32_NONE_LOOKUP_MODEL: // No CRC (dummy)
+        default:
+            ctx->init = 0x00000000;    // Default initial value
+            ctx->poly = 0x00000000;    // Default polynomial (no operation)
+            ctx->xor_out = 0x00000000; // Default XOR value
+            ctx->ref_in = false;       // Do not reverse input bits
+            ctx->ref_out = false;      // Do not reverse output bits
+            break;
     }
 }
 
@@ -161,8 +161,8 @@ void crc32_lookup_pack_buf(crc32_lookup_param_model_e model, uint8_t* buf,
         return; // Not enough space for CRC
     }
 
-    uint32_t crc32_lookup = crc32_lookup_calculate(model, buf,
-                                                   len - sizeof(uint32_t));
+    uint32_t crc32_lookup =
+        crc32_lookup_calculate(model, buf, len - sizeof(uint32_t));
     *(buf + len - 4) = (uint8_t)(crc32_lookup & 0xFF);
     *(buf + len - 3) = (uint8_t)((crc32_lookup >> 8) & 0xFF);
     *(buf + len - 2) = (uint8_t)((crc32_lookup >> 16) & 0xFF);
@@ -175,10 +175,10 @@ bool crc32_lookup_verify_buf(crc32_lookup_param_model_e model,
         return false; // Not enough space for CRC
     }
 
-    uint32_t stored_crc = (*(buf + len - 1) << 24) | (*(buf + len - 2) << 16)
-                          | (*(buf + len - 3) << 8) | (*(buf + len - 4));
-    uint32_t calculated_crc = crc32_lookup_calculate(model, buf,
-                                                     len - sizeof(uint32_t));
+    uint32_t stored_crc = (*(buf + len - 1) << 24) | (*(buf + len - 2) << 16) |
+                          (*(buf + len - 3) << 8) | (*(buf + len - 4));
+    uint32_t calculated_crc =
+        crc32_lookup_calculate(model, buf, len - sizeof(uint32_t));
     return (stored_crc == calculated_crc);
 }
 

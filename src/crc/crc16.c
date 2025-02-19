@@ -39,87 +39,87 @@
 /* Public functions --------------------------------------------------------- */
 void crc16_init(crc16_ctx_t* ctx, crc16_param_model_e model) {
     switch (model) {
-    case CRC16_IBM_MODEL:      // CRC-16 IBM
-        ctx->init = 0x0000;    // Initial value
-        ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
-        ctx->xor_out = 0x0000; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_IBM_MODEL:      // CRC-16 IBM
+            ctx->init = 0x0000;    // Initial value
+            ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
+            ctx->xor_out = 0x0000; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_MAXIM_MODEL:    // CRC-16 MAXIM/Dallas
-        ctx->init = 0x0000;    // Initial value
-        ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
-        ctx->xor_out = 0xFFFF; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_MAXIM_MODEL:    // CRC-16 MAXIM/Dallas
+            ctx->init = 0x0000;    // Initial value
+            ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
+            ctx->xor_out = 0xFFFF; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_USB_MODEL:      // CRC-16 USB
-        ctx->init = 0xFFFF;    // Initial value
-        ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
-        ctx->xor_out = 0xFFFF; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_USB_MODEL:      // CRC-16 USB
+            ctx->init = 0xFFFF;    // Initial value
+            ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
+            ctx->xor_out = 0xFFFF; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_MODBUS_MODEL:   // CRC-16 MODBUS
-        ctx->init = 0xFFFF;    // Initial value
-        ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
-        ctx->xor_out = 0x0000; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_MODBUS_MODEL:   // CRC-16 MODBUS
+            ctx->init = 0xFFFF;    // Initial value
+            ctx->poly = 0x8005;    // Polynomial (x^16 + x^15 + x^2 + 1)
+            ctx->xor_out = 0x0000; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_CCITT_MODEL:    // CRC-16 CCITT (0x0000)
-        ctx->init = 0x0000;    // Initial value
-        ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
-        ctx->xor_out = 0x0000; // Final XOR value
-        ctx->ref_in = true;    // Do not reverse input bits
-        ctx->ref_out = true;   // Do not reverse output bits
-        break;
+        case CRC16_CCITT_MODEL:    // CRC-16 CCITT (0x0000)
+            ctx->init = 0x0000;    // Initial value
+            ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
+            ctx->xor_out = 0x0000; // Final XOR value
+            ctx->ref_in = true;    // Do not reverse input bits
+            ctx->ref_out = true;   // Do not reverse output bits
+            break;
 
-    case CRC16_CCITT_FALSE_MODEL: // CRC-16 CCITT_FALSE (0xFFFF)
-        ctx->init = 0xFFFF;       // Initial value
-        ctx->poly = 0x1021;       // Polynomial (x^16 + x^12 + x^5 + 1)
-        ctx->xor_out = 0x0000;    // Final XOR value
-        ctx->ref_in = false;      // Do not reverse input bits
-        ctx->ref_out = false;     // Do not reverse output bits
-        break;
+        case CRC16_CCITT_FALSE_MODEL: // CRC-16 CCITT_FALSE (0xFFFF)
+            ctx->init = 0xFFFF;       // Initial value
+            ctx->poly = 0x1021;       // Polynomial (x^16 + x^12 + x^5 + 1)
+            ctx->xor_out = 0x0000;    // Final XOR value
+            ctx->ref_in = false;      // Do not reverse input bits
+            ctx->ref_out = false;     // Do not reverse output bits
+            break;
 
-    case CRC16_X25_MODEL:      // CRC-16 X25
-        ctx->init = 0xFFFF;    // Initial value
-        ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
-        ctx->xor_out = 0xFFFF; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_X25_MODEL:      // CRC-16 X25
+            ctx->init = 0xFFFF;    // Initial value
+            ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
+            ctx->xor_out = 0xFFFF; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_XMODEM_MODEL:   // CRC-16 XMODEM
-        ctx->init = 0x0000;    // Initial value
-        ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
-        ctx->xor_out = 0x0000; // Final XOR value
-        ctx->ref_in = false;   // Do not reverse input bits
-        ctx->ref_out = false;  // Do not reverse output bits
-        break;
+        case CRC16_XMODEM_MODEL:   // CRC-16 XMODEM
+            ctx->init = 0x0000;    // Initial value
+            ctx->poly = 0x1021;    // Polynomial (x^16 + x^12 + x^5 + 1)
+            ctx->xor_out = 0x0000; // Final XOR value
+            ctx->ref_in = false;   // Do not reverse input bits
+            ctx->ref_out = false;  // Do not reverse output bits
+            break;
 
-    case CRC16_DNP_MODEL:      // CRC-16 DNP
-        ctx->init = 0x0000;    // Initial value
-        ctx->poly = 0x3D65;    // Polynomial (x^16 + x^13 + x^12 + x^11 + x^10 +
-                               // x^8 + x^6 + x^5 + x^2 + 1)
-        ctx->xor_out = 0xFFFF; // Final XOR value
-        ctx->ref_in = true;    // Reverse input bits
-        ctx->ref_out = true;   // Reverse output bits
-        break;
+        case CRC16_DNP_MODEL:   // CRC-16 DNP
+            ctx->init = 0x0000; // Initial value
+            ctx->poly = 0x3D65; // Polynomial (x^16 + x^13 + x^12 + x^11 + x^10
+                                // + x^8 + x^6 + x^5 + x^2 + 1)
+            ctx->xor_out = 0xFFFF; // Final XOR value
+            ctx->ref_in = true;    // Reverse input bits
+            ctx->ref_out = true;   // Reverse output bits
+            break;
 
-    case CRC16_NONE_MODEL: // No CRC (dummy)
-    default:
-        ctx->init = 0x0000;    // Default initial value
-        ctx->poly = 0x0000;    // Default polynomial (no operation)
-        ctx->xor_out = 0x0000; // Default XOR value
-        ctx->ref_in = false;   // Do not reverse input bits
-        ctx->ref_out = false;  // Do not reverse output bits
-        break;
+        case CRC16_NONE_MODEL: // No CRC (dummy)
+        default:
+            ctx->init = 0x0000;    // Default initial value
+            ctx->poly = 0x0000;    // Default polynomial (no operation)
+            ctx->xor_out = 0x0000; // Default XOR value
+            ctx->ref_in = false;   // Do not reverse input bits
+            ctx->ref_out = false;  // Do not reverse output bits
+            break;
     }
 }
 
@@ -186,8 +186,8 @@ bool crc16_verify_buf(crc16_param_model_e model, const uint8_t* buf,
     }
 
     uint16_t stored_crc = (*(buf + len - 1) << 8) | (*(buf + len - 2));
-    uint16_t calculated_crc = crc16_calculate(model, buf,
-                                              len - sizeof(uint16_t));
+    uint16_t calculated_crc =
+        crc16_calculate(model, buf, len - sizeof(uint16_t));
     return (stored_crc == calculated_crc);
 }
 

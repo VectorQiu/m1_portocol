@@ -60,49 +60,49 @@ static const uint8_t crc8_poly_0x31_table[16] = {
 /* Public functions --------------------------------------------------------- */
 void crc8_lookup_init(crc8_lookup_ctx_t* ctx, crc8_lookup_param_model_e model) {
     switch (model) {
-    case CRC8_LOOKUP_MODEL:   // Standard CRC-8
-        ctx->init = 0x00;     // Initial value
-        ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x00;  // Final XOR value
-        ctx->ref_in = false;  // Do not reverse input bits
-        ctx->ref_out = false; // Do not reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint8_t*)crc8_poly_0x07_table;
-        break;
-    case CRC8_ITU_LOOKUP_MODEL: // CRC-8 ITU
-        ctx->init = 0x00;       // Initial value
-        ctx->poly = 0x07;       // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x55;    // Final XOR value
-        ctx->ref_in = false;    // Do not reverse input bits
-        ctx->ref_out = false;   // Do not reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint8_t*)crc8_poly_0x07_table;
-        break;
-    case CRC8_ROHC_LOOKUP_MODEL: // CRC-8 ROHC
-        ctx->init = 0xFF;        // Initial value
-        ctx->poly = 0x07;        // Polynomial (x^8 + x^2 + x^1 + 1)
-        ctx->xor_out = 0x00;     // Final XOR value
-        ctx->ref_in = true;      // Reverse input bits
-        ctx->ref_out = true;     // Reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint8_t*)crc8_poly_0x07_table;
-        break;
-    case CRC8_MAXIM_LOOKUP_MODEL: // CRC-8 Maxim/Dallas
-        ctx->init = 0x00;         // Initial value
-        ctx->poly = 0x31;         // Polynomial (x^8 + x^5 + x^4 + 1)
-        ctx->xor_out = 0x00;      // Final XOR value
-        ctx->ref_in = true;       // Reverse input bits
-        ctx->ref_out = true;      // Reverse output bits
-        ctx->table_len = 16;
-        ctx->table = (uint8_t*)crc8_poly_0x31_table;
-        break;
-    case CRC8_NONE_LOOKUP_MODEL: // No CRC (dummy)
-    default:
-        ctx->init = 0x00;    // Default initial value
-        ctx->xor_out = 0x00; // Default XOR value
-        ctx->table_len = 0;
-        ctx->table = NULL;
-        break;
+        case CRC8_LOOKUP_MODEL:   // Standard CRC-8
+            ctx->init = 0x00;     // Initial value
+            ctx->poly = 0x07;     // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x00;  // Final XOR value
+            ctx->ref_in = false;  // Do not reverse input bits
+            ctx->ref_out = false; // Do not reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint8_t*)crc8_poly_0x07_table;
+            break;
+        case CRC8_ITU_LOOKUP_MODEL: // CRC-8 ITU
+            ctx->init = 0x00;       // Initial value
+            ctx->poly = 0x07;       // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x55;    // Final XOR value
+            ctx->ref_in = false;    // Do not reverse input bits
+            ctx->ref_out = false;   // Do not reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint8_t*)crc8_poly_0x07_table;
+            break;
+        case CRC8_ROHC_LOOKUP_MODEL: // CRC-8 ROHC
+            ctx->init = 0xFF;        // Initial value
+            ctx->poly = 0x07;        // Polynomial (x^8 + x^2 + x^1 + 1)
+            ctx->xor_out = 0x00;     // Final XOR value
+            ctx->ref_in = true;      // Reverse input bits
+            ctx->ref_out = true;     // Reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint8_t*)crc8_poly_0x07_table;
+            break;
+        case CRC8_MAXIM_LOOKUP_MODEL: // CRC-8 Maxim/Dallas
+            ctx->init = 0x00;         // Initial value
+            ctx->poly = 0x31;         // Polynomial (x^8 + x^5 + x^4 + 1)
+            ctx->xor_out = 0x00;      // Final XOR value
+            ctx->ref_in = true;       // Reverse input bits
+            ctx->ref_out = true;      // Reverse output bits
+            ctx->table_len = 16;
+            ctx->table = (uint8_t*)crc8_poly_0x31_table;
+            break;
+        case CRC8_NONE_LOOKUP_MODEL: // No CRC (dummy)
+        default:
+            ctx->init = 0x00;    // Default initial value
+            ctx->xor_out = 0x00; // Default XOR value
+            ctx->table_len = 0;
+            ctx->table = NULL;
+            break;
     }
 }
 
@@ -198,8 +198,8 @@ bool crc8_lookup_verify_buf(crc8_lookup_param_model_e model, const uint8_t* buf,
     uint8_t stored_crc = buf[len - sizeof(uint8_t)];
 
     // Calculate the CRC for the data portion (excluding the last byte)
-    uint8_t calculated_crc = crc8_lookup_calculate(model, buf,
-                                                   len - sizeof(uint8_t));
+    uint8_t calculated_crc =
+        crc8_lookup_calculate(model, buf, len - sizeof(uint8_t));
 
     // Compare the stored CRC with the calculated CRC
     return (stored_crc == calculated_crc);

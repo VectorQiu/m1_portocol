@@ -39,34 +39,34 @@
 /* Public functions --------------------------------------------------------- */
 void crc32_init(crc32_ctx_t* ctx, crc32_param_model_e model) {
     switch (model) {
-    case CRC32_MODEL:           // CRC-32
-        ctx->init = 0xFFFFFFFF; // Initial value
-        ctx->poly =
-            0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 + x^16 + x^12 +
-                        // x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1)
-        ctx->xor_out = 0xFFFFFFFF; // Final XOR value
-        ctx->ref_in = true;        // Reverse input bits
-        ctx->ref_out = true;       // Reverse output bits
-        break;
+        case CRC32_MODEL:           // CRC-32
+            ctx->init = 0xFFFFFFFF; // Initial value
+            ctx->poly = 0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 +
+                                    // x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
+                                    // x^5 + x^4 + x^2 + x + 1)
+            ctx->xor_out = 0xFFFFFFFF; // Final XOR value
+            ctx->ref_in = true;        // Reverse input bits
+            ctx->ref_out = true;       // Reverse output bits
+            break;
 
-    case CRC32_MPEG2_MODEL:     // CRC-32 MPEG-2
-        ctx->init = 0xFFFFFFFF; // Initial value
-        ctx->poly =
-            0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 + x^16 + x^12 +
-                        // x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1)
-        ctx->xor_out = 0x00000000; // Final XOR value
-        ctx->ref_in = false;       // Do not reverse input bits
-        ctx->ref_out = false;      // Do not reverse output bits
-        break;
+        case CRC32_MPEG2_MODEL:     // CRC-32 MPEG-2
+            ctx->init = 0xFFFFFFFF; // Initial value
+            ctx->poly = 0x04C11DB7; // Polynomial (x^32 + x^26 + x^23 + x^22 +
+                                    // x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
+                                    // x^5 + x^4 + x^2 + x + 1)
+            ctx->xor_out = 0x00000000; // Final XOR value
+            ctx->ref_in = false;       // Do not reverse input bits
+            ctx->ref_out = false;      // Do not reverse output bits
+            break;
 
-    case CRC32_NONE_MODEL: // No CRC (dummy)
-    default:
-        ctx->init = 0x00000000;    // Default initial value
-        ctx->poly = 0x00000000;    // Default polynomial (no operation)
-        ctx->xor_out = 0x00000000; // Default XOR value
-        ctx->ref_in = false;       // Do not reverse input bits
-        ctx->ref_out = false;      // Do not reverse output bits
-        break;
+        case CRC32_NONE_MODEL: // No CRC (dummy)
+        default:
+            ctx->init = 0x00000000;    // Default initial value
+            ctx->poly = 0x00000000;    // Default polynomial (no operation)
+            ctx->xor_out = 0x00000000; // Default XOR value
+            ctx->ref_in = false;       // Do not reverse input bits
+            ctx->ref_out = false;      // Do not reverse output bits
+            break;
     }
 }
 
@@ -134,10 +134,10 @@ bool crc32_verify_buf(crc32_param_model_e model, const uint8_t* buf,
         return false; // Not enough space for CRC
     }
 
-    uint32_t stored_crc = (*(buf + len - 1) << 24) | (*(buf + len - 2) << 16)
-                          | (*(buf + len - 3) << 8) | (*(buf + len - 4));
-    uint32_t calculated_crc = crc32_calculate(model, buf,
-                                              len - sizeof(uint32_t));
+    uint32_t stored_crc = (*(buf + len - 1) << 24) | (*(buf + len - 2) << 16) |
+                          (*(buf + len - 3) << 8) | (*(buf + len - 4));
+    uint32_t calculated_crc =
+        crc32_calculate(model, buf, len - sizeof(uint32_t));
     return (stored_crc == calculated_crc);
 }
 
