@@ -1,65 +1,49 @@
-# 推荐的C语言风格和编码规则
-
-本文档描述了Tilen MAJERLE在他的项目和库中使用的C代码风格。
+# C语言风格和编码规则
 
 ------
+
+## 版本更新记录
+
+| 版本  | 日期       | 修改说明     |
+| :---- | :--------- | :----------- |
+| 1.0.0 | 2025-02-19 | 初始版本发布 |
 
 ## 目录
 
-- [推荐的C语言风格和编码规则](#推荐的c语言风格和编码规则)
+- [C语言风格和编码规则](#c语言风格和编码规则)
+  - [版本更新记录](#版本更新记录)
   - [目录](#目录)
-  - [最重要的单一规则](#最重要的单一规则)
-  - [集成 `VSCode`](#集成-vscode)
-  - [使用的约定](#使用的约定)
-  - [通用规则](#通用规则)
-  - [注释](#注释)
-  - [函数](#函数)
-  - [变量](#变量)
-  - [结构体、枚举、类型定义](#结构体枚举类型定义)
-  - [复合语句](#复合语句)
-  - [Switch 语句](#switch-语句)
-  - [宏和预处理器指令](#宏和预处理器指令)
-  - [文档](#文档)
-  - [头文件/源文件](#头文件源文件)
-  - [Clang 格式集成](#clang-格式集成)
+  - [核心规范](#核心规范)
+    - [首要原则](#首要原则)
+    - [基础规范](#基础规范)
+    - [代码格式化](#代码格式化)
+  - [编码细则](#编码细则)
+    - [注释规范](#注释规范)
+    - [函数设计](#函数设计)
+    - [变量管理](#变量管理)
+    - [复合类型](#复合类型)
+    - [控制结构](#控制结构)
+    - [预处理器](#预处理器)
+  - [工程实际](#工程实际)
+    - [文档标准](#文档标准)
+    - [文件组织](#文件组织)
+    - [工具集成](#工具集成)
 
 ------
 
-## 最重要的单一规则
+## 核心规范
 
-引用 GNOME 开发者网站的一句话：
+### 首要原则
 
-> 编写代码时最重要的规则是：检查周围的代码并尝试模仿它。
->
-> 作为维护者，收到明显与现有代码风格不同的补丁是非常令人沮丧的。这就像有人穿着泥鞋闯进了一个一尘不染的房子。
->
-> 因此，无论本文档推荐什么，如果已有代码存在并且你正在修补它，请保持其当前风格一致，即使这不是你最喜欢的风格。
-
-------
-
-## 集成 `VSCode`
-
-`VSCode`自带预装的clang-format工具（`LLVM`包的一部分），旨在帮助开发人员在代码开发过程中进行自动格式化。
-
-因此，它允许用户在文件更改（和保存）时格式化代码。当文件保存时，`VSCode`将尝试调用clang-format来格式化代码。使用的规则在.clang-format文件中。如果clang-format在当前文件路径下找不到规则，它会一路向上查找，直到找到为止。如果仍然没有可用的规则，则使用默认规则。
-
-此存储库始终包含最新的.clang-format文件，其中的规则与解释的规则匹配。你可以将其放在项目的根目录下，甚至可以放在软件开发项目的根目录下——为所有项目使用一个文件！
-
-需要启用一些配置：`VSCode`配置
-
-------
-
-## 使用的约定
+> **黄金法则**：保持与现有代码风格一致，即使与本文规范冲突。维护代码风格一致性高于个人偏好。
 
 本文档中的关键字 必须 、**MUST NOT** 、**REQUIRED** 、**SHALL** 、**SHALL NOT** 、**SHOULD** 、**SHOULD NOT** 、**RECOMMENDED** 、**NOT RECOMMENDED** 、**MAY** 和 **OPTIONAL**应按照`BCP 14`  `[RFC2119]` `[RFC8174]`中的描述进行解释。
 
-------
-
-## 通用规则
+### 基础规范
 
 以下列出了最明显和最重要的一般规则。在继续阅读其他章节之前，请仔细检查这些规则。
 
-- `clang-format` **SHOULD** 与附加到此存储库的格式化文件一起使用
+- `clang-format` 附加到此存储库的格式化文件一起使用
 
 - 使用`C11`标准
 
@@ -467,7 +451,25 @@
 
 - 始终尊重项目或库中已有的代码风格
 
-## 注释
+### 代码格式化
+
+> 将源文件编码统一为 `UTF-8`
+>
+> 将 TAB 键替换为 4 空格
+>
+> 将每行末尾多余的空格删除，并统一换行符为 '\n'
+
+该项目包含 `.clang-format` 和 `clang-format-config.json` 文件，可以使用 `clang-format` 工具统一代码风格。在 `.vscode` 目录中还设置了代码格式的自动化管理。
+
+格式化命令：
+
+```bash
+python3 .\scripts\run-clang-format-from-config.py
+```
+
+## 编码细则
+
+### 注释规范
 
 - 不允许使用`//`开头的注释。始终使用`/* comment */`，即使是单行注释也一样
 
@@ -489,28 +491,66 @@
    */
 
   /*
-  * Single line comment without space before asterisk (wrong)
-  */
-
-  /*
    * Single line comment in multi-line configuration (wrong)
    */
 
   /* Single line comment (ok) */
   ```
-
-- 使用12个缩进（12 * 4个空格）偏移进行注释。如果语句大于12个缩进，使注释对齐到下一个可用的4空格缩进（如下示例）
+  
+- 每个文件必须包括`doxygen`注解以及简要描述，后跟空行（使用`doxygen`时）
 
   ```c
-  void my_func(void) {
-      char a, b;
-
-      a = call_func_returning_char_a(a);          /* This is comment with 12*4 spaces indent from beginning of line */
-      b = call_func_returning_char_a_but_func_name_is_very_long(a);   /* This is comment, aligned to 4-spaces indent */
-  }
+  /**
+   * \file            template.h
+   * \brief           Template include file
+   */
+                      /* Here is empty line */
   ```
 
-## 函数
+- 每个文件（头文件或源文件）必须包括许可（开头注释包含单个星号，因为这必须被doxygen忽略）
+
+- 使用项目/库已使用的相同许可
+
+  ```c
+  /**
+   * \file            template.h
+   * \brief           Template include file
+   */
+  
+  /*
+   * Copyright (c) year FirstName LASTNAME
+   *
+   * Permission is hereby granted, free of charge, to any person
+   * obtaining a copy of this software and associated documentation
+   * files (the "Software"), to deal in the Software without restriction,
+   * including without limitation the rights to use, copy, modify, merge,
+   * publish, distribute, sublicense, and/or sell copies of the Software,
+   * and to permit persons to whom the Software is furnished to do so,
+   * subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be
+   * included in all copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+   * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+   * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+   * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+   * OTHER DEALINGS IN THE SOFTWARE.
+   *
+   * This file is part of library_name.
+   *
+   * Author:          xxx <xxx@xxx.com>
+   * Version:         _version_
+   */
+  ```
+
+
+### 函数设计
+
+> 函数应该尽量精简，仅完成相对独立的简单功能。函数的实现不应该太长，函数实现太长，应该反思能够如何修改(或拆分)使得函数更为精简、易懂。
 
 - 每个可能从其模块外部访问的函数，必须包括函数原型（或声明）
 
@@ -571,9 +611,7 @@
   }
   ```
 
-------
-
-## 变量
+### 变量管理
 
 - 使变量名全小写，并可选地使用下划线`_`字符
 
@@ -632,9 +670,7 @@
   char *p, *n;
   ```
 
-------
-
-## 结构体、枚举、类型定义
+### 复合类型
 
 - 结构体或枚举名称必须为小写，并可选地在单词之间使用下划线`_`字符
 - 结构体或枚举可以包含`typedef`关键字
@@ -720,9 +756,7 @@ typedef enum {
   typedef uint8_t (*my_func_typedef_fn)(uint8_t p1, const char* p2);
   ```
 
-------
-
-## 复合语句
+### 控制结构
 
 - 每个复合语句必须包含开括号和闭括号，即使它只包含一个嵌套语句
 
@@ -879,10 +913,6 @@ typedef enum {
   }
   ```
 
-------
-
-## Switch 语句
-
 - 每个case语句添加单个缩进
 
 - 在每个case或default语句中，break语句使用额外的单个缩进
@@ -960,7 +990,7 @@ typedef enum {
 
 ------
 
-## 宏和预处理器指令
+### 预处理器
 
 - 始终使用宏代替文字常量，尤其是数字
 
@@ -1121,9 +1151,98 @@ typedef enum {
   #endif /* !defined(XYZ) */
   ```
 
-------
+## 工程实际
 
-## 文档
+### 文档标准
+
+#### 版本控制
+
+- 使用 `Git` 进行版本管理。
+
+#### 工作流
+
+- **主分支 (`main` 或 `master`)** : 用于存放稳定的、可发布的代码。
+- **开发分支 (`develop`)** : 用于日常开发，所有新功能的集成都在此分支上完成。
+- **功能分支 (`feature/*`)** : 每个新功能从 `develop` 分支创建，完成后合并回 `develop`。
+- **发布分支 (`release/*`)** : 当 `develop` 分支准备发布时，创建一个 `release` 分支，用于修复小问题并准备发布。
+- **热修复分支 (`hotfix/*`)** : 用于紧急修复生产环境中的问题，直接从 `main` 分支创建，完成后合并到 `main` 和 `develop`。
+
+#### 语义化版本
+
+> https://semver.org/lang/zh-CN/
+
+- 版本格式：主版本号.次版本号.修订号，版本号递增规则如下：
+  - 主版本号：当你做了不兼容的 API 修改，
+  - 次版本号：当你做了向下兼容的功能性新增，
+  - 修订号：当你做了向下兼容的问题修正。
+
+先行版本号及版本编译信息可以加到“主版本号.次版本号.修订号”的后面，作为延伸。
+
+#### 约定式提交
+
+> [Conventional Commits](https://www.conventionalcommits.org/) 
+>
+> [VSCode Conventional Commits](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits) 
+
+约定式提交规范是一种基于提交信息的轻量级约定。 它提供了一组简单规则来创建清晰的提交历史； 这更有利于编写自动化工具。 通过在提交信息中描述功能、修复和破坏性变更， 使这种惯例与 [SemVer](http://semver.org/lang/zh-CN) 相互对应。
+
+- 遵循 [约定式提交](https://www.conventionalcommits.org/zh-hans/) 规范。请确保你的提交信息符合以下格式：
+
+  ```c
+  <type>[optional scope]: <description>
+  
+  [optional body]
+  
+  [optional footer(s)]
+  ```
+
+- 提交说明包含了下面的结构化元素，以向类库使用者表明其意图：
+
+  1. **fix:** *类型* 为 `fix` 的提交表示在代码库中修复了一个 bug（这和语义化版本中的 [`PATCH`](https://semver.org/lang/zh-CN/#摘要) 相对应）。
+  2. **feat:** *类型* 为 `feat` 的提交表示在代码库中新增了一个功能（这和语义化版本中的 [`MINOR`](https://semver.org/lang/zh-CN/#摘要) 相对应）。
+  3. **BREAKING CHANGE:** 在脚注中包含 `BREAKING CHANGE:` 或 <类型>(范围) 后面有一个 `!` 的提交，表示引入了破坏性 API 变更（这和语义化版本中的 [`MAJOR`](https://semver.org/lang/zh-CN/#摘要) 相对应）。 破坏性变更可以是任意 *类型* 提交的一部分。
+  4. 除`fix:`和`feat:`之外，也可以使用其它提交类型，例如@commitlint/config-conventional（基于Angular 约定）中推荐的`build:`、`chore:`、`ci:`、`docs:`、`style:`、`refactor:`、`perf:`、`test:`，等等。
+     - build: 用于修改项目构建系统，例如修改依赖库、外部接口或者升级 Node 版本等；
+     - chore: 用于对非业务性代码进行修改，例如修改构建流程或者工具配置等；
+     - ci: 用于修改持续集成流程，例如修改 Travis、Jenkins 等工作流配置；
+     - docs: 用于修改文档，例如修改 README 文件、API 文档等；
+     - style: 用于修改代码的样式，例如调整缩进、空格、空行等；
+     - refactor: 用于重构代码，例如修改代码结构、变量名、函数名等但不修改功能逻辑；
+     - perf: 用于优化性能，例如提升代码的性能、减少内存占用等；
+     - test: 用于修改测试用例，例如添加、删除、修改代码的测试用例等。
+  5. 脚注中除了 `BREAKING CHANGE: <description>` ，其它条目应该采用类似 [git trailer format](https://git-scm.com/docs/git-interpret-trailers) 这样的惯例。
+
+  其它提交类型在约定式提交规范中并没有强制限制，并且在语义化版本中没有隐式影响（除非它们包含 BREAKING CHANGE）。 可以为提交类型添加一个围在圆括号内的范围，以为其提供额外的上下文信息。例如 `feat(parser): adds ability to parse arrays.`。
+
+#### clang-format
+
+> https://clang.llvm.org/docs/ClangFormat.html
+>
+> https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+>
+> [vscode code-formatting](https://code.visualstudio.com/docs/cpp/cpp-ide#_code-formatting)
+
+`clang-format` 是一个由 LLVM 项目开发的代码格式化工具，支持多种编程语言，包括 C、C++、Java、JavaScript、Objective-C、Protobuf 和 C#。它可以根据预定义的或自定义的代码风格规则自动格式化代码，从而保持代码的一致性和可读性。
+
+#### Doxygen
+
+> [doxygen](https://www.doxygen.nl/index.html)
+>
+> [Do one thing and do it well](http://cedar-renjun.github.io/2014/03/21/learn-doxygen-in-10-minutes/index.html)
+>
+> [Microsoft HTML Help Downloads](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/microsoft-html-help-downloads)
+>
+> [Microsoft HTML Help Workshop](https://www.helpandmanual.com/downloads_mscomp.html)
+>
+> [Graphviz](https://graphviz.org)
+
+配置好`Doxyfile`后，运行以下命令生成HTML文档：
+
+```cpp
+doxygen Doxyfile
+```
+
+生成的HTML文档会保存在`docs/html`目录中，你可以通过浏览器打开`index.html`文件来查看文档。
 
 - 记录代码允许`doxygen`解析并生成`html/pdf/latex`输出，因此在项目早期阶段正确完成这一点非常重要。
 
@@ -1253,9 +1372,85 @@ typedef enum {
   #define MIN(x, y)       ((x) < (y) ? (x) : (y))
   ```
 
-------
+### 文件组织
 
-## 头文件/源文件
+#### **目录结构**
+
+> 一个清晰的目录结构能够帮助开发者快速定位文件并理解项目的整体架构。以下是一个推荐的目录结构：
+
+```bash
+project/
+├── .vscode/            				# vscode配置
+│   ├── c_cpp_properties.json 			# 配置 C/C++ 项目
+│   ├── extensions.json       			# 推荐VS Code 扩展列表  
+│   ├── file_comment.code-snippets      # 自定义代码片段文件     
+│   ├── launch.json          			# 配置调试环境
+│   ├── settings.json          			# 配置项目的本地设置
+│   └── tasks.json          			# 定义构建任务或其他自动化任务
+├── src/                				# 源代码文件
+│   ├── main.c          				# 主程序入口
+│   ├── module1/        				# 模块1相关代码
+│   │   ├── module1.c
+│   │   └── include
+│   │   	└── module1
+│   │   		└── module1.h
+│   ├── module2/        				# 模块2相关代码
+│   │   ├── module2.c
+│   │   └── include/
+│   │   	└── module2/
+│   │   		└── module2.h
+│   └── utils/          				# 工具函数或通用工具模块
+│       ├── utils.c
+│       └── utils.h
+├── lib/                				# 第三方库或静态库文件
+│   ├── libfoo.a
+│   └── libbar.so
+├── docs/               				# 文档目录
+│   ├── design.md       			# 设计文档
+│   └── api.md          			# API文档
+├── test/               			# 测试代码
+│   ├── module1
+│   │	└── test_module1.c
+│   └── module2
+│    	└── test_module2.c
+├── build/              			# 编译输出目录
+│   ├── obj/            			# 中间目标文件
+│   └── bin/            			# 可执行文件
+├── scripts/            			# 脚本文件（如构建脚本、自动化脚本）
+│   └── build.sh
+├── Makefile            			# 构建工具配置文件
+└── README.md           			# 项目说明文件
+```
+
+#### 文件命名
+
+> 目录名称如果无特殊的需求，请使用全小写的形式；
+>
+> 目录名称应能够反映部分的意思，例如各芯片移植由其芯片名称构成或芯片类别构成；
+>
+> components 目录下能够反映组件的意义。
+
+#### 文件名称
+
+- **源文件** ：使用小写字母和下划线命名，例如 `module1.c`。
+- **头文件** ：与对应的源文件同名，例如 `module1.h`。
+- **测试文件** ：以 `test_` 开头，例如 `test_module1.c`。
+- **第三方库文件** ：保持原命名，但可以放在 `lib/` 目录下。
+
+#### 头文件/源文件管理
+
+> 头文件：
+>
+> - 声明函数原型。
+> - 定义结构体、枚举和宏。
+> - 包含必要的依赖头文件。
+> - 避免在头文件中包含实现细节。
+>
+> 源文件：
+>
+> - **单一职责原则** ：每个源文件应专注于实现一个模块的功能。
+> - **函数声明与实现分离** ：函数声明放在头文件中，实现放在源文件中。
+> - **避免全局变量** ：尽量减少全局变量的使用，优先使用局部变量或通过参数传递。
 
 - 文件末尾留一个空行
 
@@ -1346,28 +1541,54 @@ typedef enum {
   /* License comes here */
   #ifndef TEMPLATE_HDR_H
   #define TEMPLATE_HDR_H
-
+  
   /* Include headers */
-
+  
   #ifdef __cplusplus
   extern "C" {
   #endif /* __cplusplus */
-
+  
   /* File content here */
-
+  
   #ifdef __cplusplus
   }
   #endif /* __cplusplus */
-
+  
   #endif /* TEMPLATE_HDR_H */
   ```
 
-------
+#### **文档**
 
-## Clang 格式集成
+- **README.md** ：项目概述、编译方法、运行方式等。
+- **设计文档** ：记录系统架构、模块划分和关键设计决策。
+- **API文档** ：说明公共接口的使用方法。
 
-存储库附带始终保持最新的.clang-format文件，这是clang-format工具的输入配置。
+### 工具集成
 
-它可以无缝集成到大多数最新的技术IDE中，包括VSCode。格式化在每次文件保存时即时发生。
+#### 构建系统
 
-> [vscode code-formatting](https://code.visualstudio.com/docs/cpp/cpp-ide#_code-formatting)
+- **Makefile**:
+- **cmake**:
+- **bazel**:
+
+#### 测试与调试
+
+#### 代码审查
+
+> 定期进行代码审查，确保代码质量。
+
+#### 持续集成
+
+> 使用 CI 工具（如 Jenkins、GitHub Actions）自动化构建和测试流程。
+
+## 贡献
+
+欢迎任何形式的贡献！如果你发现任何问题或希望增加新功能，请提交 Issue 或 Pull Request。
+
+### 提交步骤
+
+1. Fork 此仓库
+2. 创建分支 (`git checkout -b feat/your-feature`)
+3. 按照约定式提交规范提交更改 (`git commit -m 'feat(scope): 添加新功能'`)
+4. 推送到分支 (`git push origin feat/your-feature`)
+5. 创建一个 Pull Request
