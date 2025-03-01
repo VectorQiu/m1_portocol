@@ -1,0 +1,4 @@
+# ref: https://github.com/github/gitignore
+
+# 忽略名为 "build" 的目录
+build/

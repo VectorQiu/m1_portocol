@@ -1,0 +1,20 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools", // 为C和C++提供语法高亮、智能感知（IntelliSense）、代码导航、调试支持等功能
+        "twxs.cmake", // 提供 CMake 支持，包括语法高亮、智能感知、CMake 构建任务的集成
+        "ms-vscode.cmake-tools", // 增强 CMake 支持，提供 CMake 项目管理、构建、调试等功能，并能够自动生成 CMake 配置
+        "streetsidesoftware.code-spell-checker", // 单词拼写检查
+        "vivaxy.vscode-conventional-commits", // 约定的提交信息格式插件
+        "cschlosser.doxdocgen", // 生成Doxygen文档插件
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "GitHub.github-vscode-theme",
+        "eamodio.gitlens",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "ms-python.python",
+        "Gruntfuggly.todo-tree", // 显示代码中的 TODO、FIXME 等注释插件
+        "Wangguixuan.var-translate-en", // 翻译代码中的变量名和注释插件
+        "vscode-icons-team.vscode-icons", // vscode-icons
+    ]
+}

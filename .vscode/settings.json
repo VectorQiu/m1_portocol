@@ -1,0 +1,92 @@
+{
+    "C_Cpp.default.compilerPath": "C:\\Program Files\\LLVM\\bin\\clang.exe",
+    "files.associations": {
+        "crc8.h": "c",
+        "crc16.h": "c",
+        "m1_async_rx_tx.h": "c",
+        "m1_format_data.h": "c",
+        "m1_format_frame.h": "c",
+        "m1_format_packet.h": "c",
+        "m1_layer_datalink.h": "c",
+        "m1_layer_network.h": "c",
+        "m1_layer_transport.h": "c",
+        "m1_protocol_def.h": "c",
+        "m1_protocol.h": "c",
+        "m1_route.h": "c",
+        "m1_rx_parse.h": "c",
+        "m1_statistic.h": "c",
+        "m1_typedef.h": "c",
+        "rtcompiler.h": "c",
+        "single_list_ex.h": "c",
+        "single_list.h": "c",
+        "memory_pool.h": "c",
+        "crc8_lookup.h": "c",
+        "stdbool.h": "c"
+    },
+    //
+    "editor.fontSize": 16,
+    "terminal.integrated.fontSize": 14,
+    "[Log]": {
+        "editor.fontSize": 14
+    },
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "files.autoSave": "afterDelay",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.renderWhitespace": "all",
+    "files.exclude": {
+        "somefolder/": true,
+        "somefile": true
+    },
+    "search.exclude": {
+        "someFolder/": true,
+        "somefile": true
+    },
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "bower.json"
+            ],
+            "url": "https://json.schemastore.org/bower"
+        }
+    ],
+    "editor.rulers": [
+        80
+    ],
+    // doxygen
+    "C_Cpp.doxygen.generatedStyle": "/**",
+    "doxdocgen.cpp.tparamTemplate": "\\tparam          {param} ",
+    "doxdocgen.file.fileTemplate": "\\file            {name}",
+    "doxdocgen.generic.briefTemplate": "\\brief           {text}",
+    "doxdocgen.generic.dateTemplate": "\\date            {date}",
+    "doxdocgen.generic.paramTemplate": "\\param[in]       {param}: ",
+    "doxdocgen.generic.returnTemplate": "\\return          {type} ",
+    "doxdocgen.file.versionTag": "\\version         0.0.1",
+    "doxdocgen.generic.useGitUserEmail": true,
+    "doxdocgen.generic.useGitUserName": true,
+    "doxdocgen.generic.commandSuggestionAddPrefix": true,
+    "doxdocgen.generic.authorTag": "\\author          {author} ({email})",
+    "doxdocgen.generic.customTags": [],
+    // conventionalCommits
+    "conventionalCommits.scopes": [
+        "readme",
+        "test",
+        "script",
+        "docs",
+        "cmake",
+        "build",
+        "vscode",
+        "m1_protocol",
+        "crc",
+        "h1_protocol"
+    ],
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.doxygen.generateOnType": false,
+    "doxdocgen.c.firstLine": "/**",
+    "[cmake]": {
+        "editor.defaultFormatter": "KylinIdeTeam.cmake-intellisence"
+    }
+}
